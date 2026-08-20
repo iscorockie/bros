@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghouse Records — Kiwatule, Kampala</title>
+<meta name="description" content="Ghouse Records: recording studio and label in Kiwatule, Kampala. Book studio sessions, catch the monthly silent disco night.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100E0C;
+    --bg-elevated:#1B1714;
+    --bg-elevated-2:#231D19;
+    --paper:#F3EDE4;
+    --ink:#F3EDE4;
+    --muted:#9C948A;
+    --line:#332C26;
+    --accent:#E8432F;
+    --radius:2px;
+    --text-secondary:#CFC7BC;
+    --header-bg:rgba(16,14,12,.82);
+    --invert-bg:#F3EDE4;
+    --invert-text:#100E0C;
+  }
+  html[data-theme="light"]{
+    --bg:#F3EDE4;
+    --bg-elevated:#EAE2D6;
+    --bg-elevated-2:#E0D6C6;
+    --ink:#1B1613;
+    --muted:#746B60;
+    --line:#D8CDBC;
+    --text-secondary:#4A4038;
+    --header-bg:rgba(243,237,228,.88);
+    --invert-bg:#100E0C;
+    --invert-text:#F3EDE4;
+  }
+  body{transition:background-color .25s ease, color .25s ease;}
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--accent); color:#100E0C;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .eyebrow em{font-style:normal; color:var(--accent);}
+  h1,h2,h3{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    line-height:0.94;
+    letter-spacing:.01em;
+  }
+  h2{font-size:clamp(34px,5.5vw,58px); margin-bottom:10px;}
+  .section{padding:100px 0;}
+  .section-head{margin-bottom:56px; max-width:640px;}
+  .section-head p{color:var(--muted); font-size:16px; margin-top:14px; line-height:1.6;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter:blur(10px);
+    background:var(--header-bg);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    font-family:'Anton',sans-serif; font-size:20px; letter-spacing:.02em;
+    text-transform:uppercase;
+  }
+  .logo span{color:var(--accent);}
+  .navlinks{display:flex; gap:30px; align-items:center;}
+  .navlinks a{
+    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted);
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--ink);}
+  .navlinks a.ig{color:var(--ink); border:1px solid var(--line); padding:9px 16px; border-radius:100px;}
+  .navlinks a.ig:hover{border-color:var(--accent); color:var(--accent);}
+  .nav-right{display:flex; align-items:center; gap:20px;}
+  .theme-toggle{
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    border:1px solid var(--line); background:transparent; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s, transform .2s;
+  }
+  .theme-toggle:hover{border-color:var(--accent); transform:translateY(-1px);}
+  .theme-toggle span{font-size:16px; line-height:1; color:var(--ink);}
+  .theme-toggle .icon-moon{display:none;}
+  html[data-theme="light"] .theme-toggle .icon-sun{display:none;}
+  html[data-theme="light"] .theme-toggle .icon-moon{display:inline;}
+  @media (max-width:760px){
+    .navlinks{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top:110px;
+    padding-bottom:60px;
+    overflow:hidden;
+  }
+  .eq{
+    position:absolute; inset:0; z-index:0;
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:4px;
+    opacity:.5;
+  }
+  .eq i{
+    flex:1;
+    background:linear-gradient(to top, var(--accent), transparent);
+    opacity:.3;
+    animation:bar 1.8s ease-in-out infinite;
+  }
+  @keyframes bar{
+    0%,100%{height:6%;}
+    50%{height:var(--h,60%);}
+  }
+  .hero-inner{position:relative; z-index:2;}
+  .hero h1{
+    font-size:clamp(48px,9vw,116px);
+    margin:18px 0 22px;
+  }
+  .hero h1 .line{display:block;}
+  .hero h1 .accented{color:var(--accent);}
+  .hero-sub{
+    max-width:540px; color:var(--muted); font-size:17px; line-height:1.65;
+    margin-bottom:40px;
+  }
+  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Space Mono',monospace; font-size:12.5px; letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:15px 26px;
+    border-radius:100px;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .18s ease, background .2s, border-color .2s, color .2s;
+    cursor:pointer; border:1px solid transparent;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-solid{background:var(--accent); color:#100E0C;}
+  .btn-ghost{border-color:var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    overflow:hidden; white-space:nowrap; background:var(--bg-elevated);
+  }
+  .marquee-track{
+    display:inline-block; padding:16px 0;
+    animation:scroll 28s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'Space Mono',monospace; font-size:13px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted); margin:0 26px;
+  }
+  .marquee-track span.hi{color:var(--accent);}
+  @keyframes scroll{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:70px; align-items:start;
+  }
+  .about-copy p{color:var(--text-secondary); font-size:16px; line-height:1.75; margin-bottom:18px; max-width:520px;}
+  .about-copy p strong{color:var(--ink);}
+  .stat-list{
+    border-top:1px solid var(--line);
+  }
+  .stat{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:20px 0; border-bottom:1px solid var(--line);
+    font-family:'Space Mono',monospace;
+  }
+  .stat .k{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .stat .v{font-family:'Anton',sans-serif; font-size:26px; text-transform:none;}
+
+  /* ---------- BOOKING ---------- */
+  .booking{background:var(--bg-elevated); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .booking-grid{display:grid; grid-template-columns:.85fr 1.15fr; gap:70px; align-items:start;}
+  .booking-copy p{color:var(--text-secondary); font-size:16px; line-height:1.75; margin-bottom:16px; max-width:440px;}
+  .package-list{margin-top:28px; display:flex; flex-direction:column; gap:0;}
+  .package{
+    display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);
+    font-family:'Space Mono',monospace; font-size:13px;
+  }
+  .package .p-name{color:var(--ink); text-transform:uppercase; letter-spacing:.05em;}
+  .package .p-rate{color:var(--muted);}
+  .package.hl .p-rate{color:var(--accent);}
+
+  form{
+    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius);
+    padding:34px;
+  }
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
+  .field{display:flex; flex-direction:column; gap:8px; margin-bottom:16px;}
+  .field label{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+  }
+  .field input, .field select, .field textarea{
+    background:var(--bg-elevated); border:1px solid var(--line); color:var(--ink);
+    padding:13px 14px; font-family:'Inter',sans-serif; font-size:14.5px; border-radius:2px;
+    width:100%;
+  }
+  .field select{appearance:none; cursor:pointer;}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--accent); outline:none;}
+  .field textarea{resize:vertical; min-height:80px;}
+  .submit-row{display:flex; align-items:center; gap:16px; margin-top:6px; flex-wrap:wrap;}
+  .form-note{font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); line-height:1.6;}
+
+  /* ---------- SILENT DISCO ---------- */
+  .disco-list{border-top:1px solid var(--line);}
+  .disco-row{
+    display:grid; grid-template-columns:110px 1fr auto auto; gap:24px; align-items:center;
+    padding:24px 0; border-bottom:1px solid var(--line);
+  }
+  .disco-date{font-family:'Space Mono',monospace; display:flex; flex-direction:column; line-height:1.3;}
+  .disco-date .dd{font-size:11px; letter-spacing:.1em; color:var(--accent);}
+  .disco-date .dm{font-size:18px; color:var(--ink);}
+  .disco-info h3{font-family:'Anton',sans-serif; text-transform:uppercase; font-size:20px; margin-bottom:4px;}
+  .disco-info p{font-size:13.5px; color:var(--muted);}
+  .disco-price{font-family:'Space Mono',monospace; font-size:14px; color:var(--ink); white-space:nowrap;}
+  .rsvp{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink); border:1px solid var(--line); padding:9px 15px; border-radius:100px;
+    transition:all .2s; white-space:nowrap;
+  }
+  .rsvp:hover{border-color:var(--accent); color:var(--accent);}
+  .disco-note{
+    margin-top:22px; font-family:'Space Mono',monospace; font-size:12px; color:var(--muted);
+  }
+
+  /* ---------- TICKETING ---------- */
+  .tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:44px;}
+  .tier{
+    border:1px solid var(--line); border-radius:var(--radius); padding:30px 26px;
+    display:flex; flex-direction:column; gap:14px;
+    transition:border-color .25s;
+  }
+  .tier.featured{border-color:var(--accent); background:var(--bg-elevated);}
+  .tier-name{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .tier-price{font-family:'Anton',sans-serif; font-size:40px;}
+  .tier-price sup{font-family:'Space Mono',monospace; font-size:14px; margin-left:4px; color:var(--muted);}
+  .tier ul{list-style:none; font-size:13.5px; color:var(--text-secondary); line-height:2; margin:6px 0 10px;}
+  .tier ul li::before{content:"— "; color:var(--muted);}
+  .stepper{display:flex; align-items:center; gap:14px; margin-top:auto;}
+  .stepper button{
+    width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--ink);
+    font-size:16px; cursor:pointer; font-family:'Space Mono',monospace;
+  }
+  .stepper button:hover{border-color:var(--accent); color:var(--accent);}
+  .stepper .qty{font-family:'Space Mono',monospace; min-width:18px; text-align:center;}
+  .tier-btn{
+    margin-top:10px; text-align:center; padding:13px; border-radius:100px;
+    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    background:var(--invert-bg); color:var(--invert-text); cursor:pointer; border:none;
+  }
+  .tier-btn:hover{background:var(--accent);}
+
+  .ticket-summary{
+    background:var(--bg-elevated); border:1px dashed var(--line); border-radius:var(--radius);
+    padding:30px; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center;
+  }
+  .ref{font-family:'Space Mono',monospace; font-size:13px; color:var(--muted);}
+  .ref b{color:var(--ink); letter-spacing:.05em;}
+  .momo-steps{font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); line-height:2; margin-top:10px;}
+  .momo-steps b{color:var(--ink);}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .gallery img{
+    width:100%; height:220px; object-fit:cover; border-radius:2px; filter:grayscale(.15) contrast(1.05);
+    transition:filter .3s;
+  }
+  .gallery a:hover img{filter:none;}
+  .gallery a:nth-child(1){grid-row:span 2; height:100%;}
+  .gallery a:nth-child(1) img{height:100%;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line); padding:70px 0 30px;}
+  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:50px; margin-bottom:60px;}
+  .footer-brand h3{font-size:32px; margin-bottom:14px;}
+  .footer-brand p{color:var(--muted); font-size:14px; max-width:280px; line-height:1.6;}
+  .foot-col{display:flex; flex-direction:column; gap:12px;}
+  .foot-col .k{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px;}
+  .foot-col a, .foot-col span{font-size:14.5px; color:var(--text-secondary);}
+  .foot-col a:hover{color:var(--accent);}
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center; padding-top:24px; border-top:1px solid var(--line);
+    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--muted); flex-wrap:wrap; gap:10px;
+  }
+
+  @media (max-width:900px){
+    .about-grid, .booking-grid{grid-template-columns:1fr; gap:40px;}
+    .tiers{grid-template-columns:1fr;}
+    .gallery{grid-template-columns:1fr 1fr;}
+    .gallery a:nth-child(1){grid-row:span 1; height:220px;}
+    .footer-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .disco-row{grid-template-columns:1fr; gap:8px; text-align:left;}
+    .disco-price{order:3;}
+    .rsvp{order:4; align-self:flex-start;}
+  }
+  @media (max-width:600px){
+    .section{padding:70px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="logo">GHOUSE<span>·</span>RECORDS</a>
+    <div class="nav-right">
+      <div class="navlinks">
+        <a href="#booking">Book Studio</a>
+        <a href="#disco">Silent Disco</a>
+        <a href="#tickets">Tickets</a>
+        <a href="#gallery">Gallery</a>
+        <a class="ig" href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener">@ghouserecordsug</a>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle light / dark mode">
+        <span class="icon-sun" aria-hidden="true">☀</span>
+        <span class="icon-moon" aria-hidden="true">☾</span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eq" id="eq" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Kiwatule, Kampala <em>·</em> Recording Studio &amp; Label</p>
+      <h1>
+        <span class="line">BUILT TO</span>
+        <span class="line accented">RECORD.</span>
+      </h1>
+      <p class="hero-sub">Ghouse Records is a working recording studio in Kiwatule — tracking, mixing and mastering, day in and day out. Once a month, the same floor clears out for a silent disco night.</p>
+
+      <div class="hero-cta">
+        <a href="#booking" class="btn btn-solid">Book a session</a>
+        <a href="#disco" class="btn btn-ghost">Silent disco nights</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="wrap about-grid">
+      <div class="about-copy">
+        <p class="eyebrow" style="margin-bottom:18px;">The studio</p>
+        <p><strong>Ghouse Records started as a booth in Kiwatule</strong> built for artists who needed somewhere honest to record — no gatekeeping, no rush. Five years on it's a full studio, a small stable of signed acts, and a label that puts out what gets made here.</p>
+        <p>Most days, the room is booked for tracking, mixing and mastering. Once a month, on a Saturday, the gear gets cleared and the same floor turns into a silent disco — headsets on, one night, Kiwatule.</p>
+        <p>Sessions, nights, tickets — everything routes through this page.</p>
+      </div>
+      <div class="stat-list">
+        <div class="stat"><span class="k">Based in</span><span class="v">Kiwatule</span></div>
+        <div class="stat"><span class="k">Running since</span><span class="v">2021</span></div>
+        <div class="stat"><span class="k">Studio bookings</span><span class="v">Daily</span></div>
+        <div class="stat"><span class="k">Silent disco</span><span class="v">Monthly</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="section booking" id="booking">
+    <div class="wrap booking-grid">
+      <div class="booking-copy">
+        <p class="eyebrow" style="margin-bottom:18px;">The main thing</p>
+        <h2 style="margin-bottom:20px;">Book a<br>Session</h2>
+        <p>The booth that started it all is still booked out most days. Recording, mixing, mastering or full-day rehearsal blocks — tell us what you need and a producer confirms your slot over WhatsApp.</p>
+        <div class="package-list">
+          <div class="package hl"><span class="p-name">Recording (2 hrs)</span><span class="p-rate">UGX 30,000</span></div>
+          <div class="package"><span class="p-name">Mixing (per track)</span><span class="p-rate">UGX 150,000</span></div>
+          <div class="package"><span class="p-name">Mastering (per track)</span><span class="p-rate">UGX 80,000</span></div>
+          <div class="package"><span class="p-name">Full day block (8hrs)</span><span class="p-rate">UGX 350,000</span></div>
+        </div>
+      </div>
+
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="b-name">Your name</label>
+            <input id="b-name" type="text" required placeholder="Full name">
+          </div>
+          <div class="field">
+            <label for="b-phone">Phone / WhatsApp</label>
+            <input id="b-phone" type="tel" required placeholder="07XX XXX XXX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="b-date">Preferred date</label>
+            <input id="b-date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="b-time">Preferred time</label>
+            <input id="b-time" type="time" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="b-package">Session type</label>
+            <select id="b-package">
+              <option>Recording</option>
+              <option>Mixing</option>
+              <option>Mastering</option>
+              <option>Full day block</option>
+              <option>Rehearsal space</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="b-artists">Number of artists</label>
+            <input id="b-artists" type="number" min="1" value="1">
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-notes">Anything the producer should know</label>
+          <textarea id="b-notes" placeholder="Genre, reference tracks, engineer preference…"></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-solid" style="border:none;">Send booking request →</button>
+          <span class="form-note">Opens WhatsApp with your details pre-filled.<br>A producer confirms the slot within a day.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- SILENT DISCO -->
+  <section class="section" id="disco">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Once a month</p>
+        <h2>Silent Disco Night</h2>
+        <p>One Saturday a month, the studio floor clears and the headsets come out. Same room, different rules — quiet outside, loud inside.</p>
+      </div>
+
+      <div class="disco-list" id="discoList">
+        <div class="disco-row">
+          <div class="disco-date"><span class="dd">SAT</span><span class="dm">AUG 30</span></div>
+          <div class="disco-info">
+            <h3>Silent Disco Night</h3>
+            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
+          </div>
+          <div class="disco-price">UGX 30,000</div>
+          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 30 Aug)">RSVP →</a>
+        </div>
+        <div class="disco-row">
+          <div class="disco-date"><span class="dd">SAT</span><span class="dm">SEP 27</span></div>
+          <div class="disco-info">
+            <h3>Silent Disco Night</h3>
+            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
+          </div>
+          <div class="disco-price">UGX 30,000</div>
+          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 27 Sep)">RSVP →</a>
+        </div>
+        <div class="disco-row">
+          <div class="disco-date"><span class="dd">SAT</span><span class="dm">OCT 25</span></div>
+          <div class="disco-info">
+            <h3>Silent Disco Night</h3>
+            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
+          </div>
+          <div class="disco-price">UGX 30,000</div>
+          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 25 Oct)">RSVP →</a>
+        </div>
+      </div>
+      <p class="disco-note">Held the last Saturday of every month. Dates confirmed on Instagram closer to the night.</p>
+    </div>
+  </section>
+
+  <!-- TICKETING -->
+  <section class="section" id="tickets">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">For the next disco night</p>
+        <h2>Get Tickets</h2>
+        <p>Pick a tier, choose your headcount, and check out over WhatsApp or MTN MoMo. Your reference code is your ticket at the door.</p>
+      </div>
+
+      <div class="tiers" id="tiersGrid">
+        <div class="tier" data-tier="General" data-price="30000">
+          <span class="tier-name">General Floor</span>
+          <span class="tier-price">30k<sup>UGX</sup></span>
+          <ul>
+            <li>Entry + wireless headset</li>
+            <li>Full night access</li>
+            <li>Standing floor</li>
+          </ul>
+          <div class="stepper">
+            <button type="button" class="qty-minus">−</button>
+            <span class="qty">1</span>
+            <button type="button" class="qty-plus">+</button>
+          </div>
+          <button class="tier-btn" type="button">Add to order</button>
+        </div>
+
+        <div class="tier featured" data-tier="VIP Booth" data-price="70000">
+          <span class="tier-name">VIP Booth</span>
+          <span class="tier-price">70k<sup>UGX</sup></span>
+          <ul>
+            <li>Reserved VIP booth</li>
+            <li>Priority headset</li>
+            <li>2 house drinks included</li>
+          </ul>
+          <div class="stepper">
+            <button type="button" class="qty-minus">−</button>
+            <span class="qty">1</span>
+            <button type="button" class="qty-plus">+</button>
+          </div>
+          <button class="tier-btn" type="button">Add to order</button>
+        </div>
+
+        <div class="tier" data-tier="Group of 5" data-price="130000">
+          <span class="tier-name">Group of 5</span>
+          <span class="tier-price">130k<sup>UGX</sup></span>
+          <ul>
+            <li>5 general floor entries</li>
+            <li>5 headsets included</li>
+            <li>Best for crews &amp; label fam</li>
+          </ul>
+          <div class="stepper">
+            <button type="button" class="qty-minus">−</button>
+            <span class="qty">1</span>
+            <button type="button" class="qty-plus">+</button>
+          </div>
+          <button class="tier-btn" type="button">Add to order</button>
+        </div>
+      </div>
+
+      <div class="ticket-summary">
+        <div>
+          <p class="ref">Order reference <b id="refCode">—</b></p>
+          <div class="momo-steps" id="momoSteps">
+            Select a tier above to generate your reference code, then:<br>
+            <b>1.</b> Send payment via MTN MoMo to <b>+256 706 612 367</b> (Ghouse Records)<br>
+            <b>2.</b> Use your reference code as the payment comment<br>
+            <b>3.</b> Confirm on WhatsApp — we'll text your e-ticket back
+          </div>
+        </div>
+        <a id="ticketWA" class="btn btn-solid" href="#" target="_blank" rel="noopener">Confirm on WhatsApp →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section" id="gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">In the room</p>
+        <h2>Gallery</h2>
+      </div>
+      <div class="gallery">
+        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=900&q=80" alt="Producer at the mixing desk"></a>
+        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=700&q=80" alt="Crowd wearing silent disco headphones"></a>
+        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1571266028243-e4bb35c0b13a?w=700&q=80" alt="Studio microphone in the booth"></a>
+        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=700&q=80" alt="DJ set at Ghouse Records"></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>GHOUSE<br>RECORDS</h3>
+        <p>Recording studio and label in Kiwatule, Kampala — with a silent disco night once a month.</p>
+      </div>
+      <div class="foot-col">
+        <span class="k">Visit</span>
+        <span>Kiwatule, Kampala, Uganda</span>
+        <span class="k" style="margin-top:10px;">Contact</span>
+        <a href="https://wa.me/256706612367" target="_blank" rel="noopener">WhatsApp: +256 706 612 367</a>
+        <a href="mailto:booking@ghouserecords.ug">booking@ghouserecords.ug</a>
+      </div>
+      <div class="foot-col">
+        <span class="k">Follow</span>
+        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener">Instagram — @ghouserecordsug</a>
+        <span class="k" style="margin-top:10px;">On this site</span>
+        <a href="#booking">Studio bookings</a>
+        <a href="#disco">Silent disco nights</a>
+        <a href="#tickets">Tickets</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ghouse Records, Kiwatule.</span>
+      <span>Built for the studio, run from the floor.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // build equalizer bars
+  const eq = document.getElementById('eq');
+  const barCount = 40;
+  for(let i=0;i<barCount;i++){
+    const bar = document.createElement('i');
+    const h = 20 + Math.random()*70;
+    bar.style.setProperty('--h', h+'%');
+    bar.style.animationDelay = (Math.random()*1.8)+'s';
+    bar.style.animationDuration = (1.3 + Math.random()*1.2)+'s';
+    eq.appendChild(bar);
+  }
+
+  // marquee content
+  const words = ['RECORDING STUDIO','MIXING & MASTERING','BOOK A SESSION','KIWATULE','GHOUSE RECORDS','SILENT DISCO — ONCE A MONTH'];
+  const track = document.getElementById('marqueeTrack');
+  let mHTML = '';
+  for(let r=0;r<2;r++){
+    words.forEach((w,i)=>{ mHTML += `<span class="${i%3===0?'hi':''}">${w}</span>`; });
+  }
+  track.innerHTML = mHTML;
+
+  const WHATSAPP_NUMBER = "256706612367";
+
+  // theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', ()=>{
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  });
+
+  // RSVP -> whatsapp
+  document.querySelectorAll('.rsvp').forEach(link=>{
+    link.addEventListener('click', e=>{
+      e.preventDefault();
+      const evt = link.dataset.event;
+      const msg = encodeURIComponent(`Hi Ghouse Records! I'd like to RSVP for: ${evt}. Please send payment details.`);
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    });
+  });
+
+  // booking form -> whatsapp
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('b-name').value;
+    const phone = document.getElementById('b-phone').value;
+    const date = document.getElementById('b-date').value;
+    const time = document.getElementById('b-time').value;
+    const pkg = document.getElementById('b-package').value;
+    const artists = document.getElementById('b-artists').value;
+    const notes = document.getElementById('b-notes').value;
+    const msg = encodeURIComponent(
+      `Hi Ghouse Records! I'd like to book a session.\n`+
+      `Name: ${name}\nPhone: ${phone}\nDate: ${date}\nTime: ${time}\n`+
+      `Session: ${pkg}\nArtists: ${artists}\n`+
+      (notes ? `Notes: ${notes}\n` : '')
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  });
+
+  // ticketing
+  document.querySelectorAll('.tier').forEach(tier=>{
+    const minus = tier.querySelector('.qty-minus');
+    const plus = tier.querySelector('.qty-plus');
+    const qtyEl = tier.querySelector('.qty');
+    let qty = 1;
+    minus.addEventListener('click', ()=>{ qty = Math.max(1, qty-1); qtyEl.textContent = qty; });
+    plus.addEventListener('click', ()=>{ qty = Math.min(10, qty+1); qtyEl.textContent = qty; });
+
+    tier.querySelector('.tier-btn').addEventListener('click', ()=>{
+      const tierName = tier.dataset.tier;
+      const price = parseInt(tier.dataset.price,10);
+      const total = price*qty;
+      const ref = 'GHR-' + Math.random().toString(36).slice(2,7).toUpperCase();
+
+      document.getElementById('refCode').textContent = ref;
+      document.getElementById('momoSteps').innerHTML =
+        `<b>${qty}× ${tierName}</b> — total <b>UGX ${total.toLocaleString()}</b><br>`+
+        `<b>1.</b> Send UGX ${total.toLocaleString()} via MTN MoMo to <b>+256 706 612 367</b> (Ghouse Records)<br>`+
+        `<b>2.</b> Use <b>${ref}</b> as the payment comment<br>`+
+        `<b>3.</b> Tap "Confirm on WhatsApp" below — we'll text your e-ticket back`;
+
+      const msg = encodeURIComponent(
+        `Hi Ghouse Records! I'd like to confirm a ticket order.\n`+
+        `Tier: ${tierName}\nQty: ${qty}\nTotal: UGX ${total.toLocaleString()}\nReference: ${ref}\n`+
+        `I've sent payment via MTN MoMo — please confirm and send my e-ticket.`
+      );
+      document.getElementById('ticketWA').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      document.querySelector('.ticket-summary').scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+</script>
+
+</body>
+</html>
