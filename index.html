@@ -3,716 +3,1048 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ghouse Records — Kiwatule, Kampala</title>
-<meta name="description" content="Ghouse Records: recording studio and label in Kiwatule, Kampala. Book studio sessions, catch the monthly silent disco night.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Bros — Premium Smoke Shop | Uganda</title>
 <style>
-  :root{
-    --bg:#100E0C;
-    --bg-elevated:#1B1714;
-    --bg-elevated-2:#231D19;
-    --paper:#F3EDE4;
-    --ink:#F3EDE4;
-    --muted:#9C948A;
-    --line:#332C26;
-    --accent:#E8432F;
-    --radius:2px;
-    --text-secondary:#CFC7BC;
-    --header-bg:rgba(16,14,12,.82);
-    --invert-bg:#F3EDE4;
-    --invert-text:#100E0C;
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:       #0a0a0a;
+    --surface:  #141414;
+    --surface2: #1c1c1c;
+    --border:   #2a2a2a;
+    --accent:   #d4a24e;
+    --accent2:  #e8c274;
+    --text:     #f0ece4;
+    --text-dim: #8a8780;
+    --danger:   #e05252;
+    --green:    #4caf7c;
+    --radius:   12px;
+    --radius-sm:8px;
+    --shadow:   0 8px 32px rgba(0,0,0,.45);
+    --font:     'Segoe UI', system-ui, -apple-system, sans-serif;
   }
-  html[data-theme="light"]{
-    --bg:#F3EDE4;
-    --bg-elevated:#EAE2D6;
-    --bg-elevated-2:#E0D6C6;
-    --ink:#1B1613;
-    --muted:#746B60;
-    --line:#D8CDBC;
-    --text-secondary:#4A4038;
-    --header-bg:rgba(243,237,228,.88);
-    --invert-bg:#100E0C;
-    --invert-text:#F3EDE4;
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
   }
-  body{transition:background-color .25s ease, color .25s ease;}
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+  a { color: inherit; text-decoration: none; }
+  img { max-width:100%; display:block; }
+  button { font-family: inherit; cursor:pointer; border:none; }
+
+  /* ===== AGE GATE ===== */
+  .age-gate {
+    position: fixed; inset:0; z-index:9999;
+    background: rgba(0,0,0,.92);
+    backdrop-filter: blur(24px);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .4s, visibility .4s;
   }
-  ::selection{background:var(--accent); color:#100E0C;}
-  a{color:inherit; text-decoration:none;}
-  img{max-width:100%; display:block;}
-  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
-  .eyebrow{
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--muted);
+  .age-gate.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+  .age-gate-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 40px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: var(--shadow);
   }
-  .eyebrow em{font-style:normal; color:var(--accent);}
-  h1,h2,h3{
-    font-family:'Anton',sans-serif;
-    font-weight:400;
-    text-transform:uppercase;
-    line-height:0.94;
-    letter-spacing:.01em;
+  .age-gate-box .logo-lg {
+    font-size: 3rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
   }
-  h2{font-size:clamp(34px,5.5vw,58px); margin-bottom:10px;}
-  .section{padding:100px 0;}
-  .section-head{margin-bottom:56px; max-width:640px;}
-  .section-head p{color:var(--muted); font-size:16px; margin-top:14px; line-height:1.6;}
-  :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  .age-gate-box p { color: var(--text-dim); margin: 16px 0 28px; font-size: 1.05rem; }
+  .age-btns { display: flex; gap: 12px; justify-content: center; }
+  .age-btns button {
+    padding: 12px 36px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: .95rem;
+    transition: all .25s;
+  }
+  .btn-yes { background: var(--accent); color: #000; }
+  .btn-yes:hover { background: var(--accent2); transform: scale(1.04); }
+  .btn-no  { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+  .btn-no:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: sticky; top:0; z-index:100;
+    background: rgba(10,10,10,.82);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    transition: box-shadow .3s;
+  }
+  .navbar.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.5); }
+  .nav-brand {
+    font-size: 1.65rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: .9rem; font-weight: 500; color: var(--text-dim);
+    transition: color .2s; position: relative;
+  }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px;
+    background: var(--accent); transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width:100%; }
+  .nav-actions { display: flex; align-items: center; gap: 16px; }
+  .nav-search {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: .88rem;
+    width: 220px;
+    transition: border-color .2s, width .3s;
+    outline: none;
+  }
+  .nav-search:focus { border-color: var(--accent); width: 260px; }
+  .nav-search::placeholder { color: var(--text-dim); }
+  .cart-btn {
+    position: relative;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text);
+    font-size: 1.1rem;
+    transition: border-color .2s, transform .2s;
+  }
+  .cart-btn:hover { border-color: var(--accent); transform: scale(1.08); }
+  .cart-badge {
+    position: absolute; top:-4px; right:-4px;
+    background: var(--accent); color: #000;
+    font-size: .65rem; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    background: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: .3s;
   }
 
-  /* ---------- NAV ---------- */
-  header{
-    position:fixed; top:0; left:0; right:0; z-index:100;
-    backdrop-filter:blur(10px);
-    background:var(--header-bg);
-    border-bottom:1px solid var(--line);
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex; align-items: center;
+    padding: 0 5%;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 20% 50%, rgba(212,162,78,.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(212,162,78,.05) 0%, transparent 50%);
   }
-  nav.wrap{
-    display:flex; align-items:center; justify-content:space-between;
-    height:72px;
+  .hero-content { max-width: 620px; z-index: 2; }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(212,162,78,.12);
+    border: 1px solid rgba(212,162,78,.25);
+    color: var(--accent);
+    font-size: .78rem; font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 24px;
   }
-  .logo{
-    font-family:'Anton',sans-serif; font-size:20px; letter-spacing:.02em;
-    text-transform:uppercase;
+  .hero h1 {
+    font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
   }
-  .logo span{color:var(--accent);}
-  .navlinks{display:flex; gap:30px; align-items:center;}
-  .navlinks a{
-    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--muted);
-    transition:color .2s;
+  .hero h1 .gold {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .navlinks a:hover{color:var(--ink);}
-  .navlinks a.ig{color:var(--ink); border:1px solid var(--line); padding:9px 16px; border-radius:100px;}
-  .navlinks a.ig:hover{border-color:var(--accent); color:var(--accent);}
-  .nav-right{display:flex; align-items:center; gap:20px;}
-  .theme-toggle{
-    width:38px; height:38px; border-radius:50%; flex-shrink:0;
-    border:1px solid var(--line); background:transparent; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:border-color .2s, transform .2s;
+  .hero p {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    margin-bottom: 36px;
+    max-width: 480px;
   }
-  .theme-toggle:hover{border-color:var(--accent); transform:translateY(-1px);}
-  .theme-toggle span{font-size:16px; line-height:1; color:var(--ink);}
-  .theme-toggle .icon-moon{display:none;}
-  html[data-theme="light"] .theme-toggle .icon-sun{display:none;}
-  html[data-theme="light"] .theme-toggle .icon-moon{display:inline;}
-  @media (max-width:760px){
-    .navlinks{display:none;}
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: .95rem;
+    border-radius: 50px;
+    transition: background .25s, transform .2s;
   }
-
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
-    min-height:92vh;
-    display:flex; flex-direction:column; justify-content:center;
-    padding-top:110px;
-    padding-bottom:60px;
-    overflow:hidden;
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-ghost {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--text);
+    font-weight: 600;
+    font-size: .95rem;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    transition: border-color .25s, color .25s;
   }
-  .eq{
-    position:absolute; inset:0; z-index:0;
-    display:flex; align-items:flex-end; justify-content:space-between;
-    gap:4px;
-    opacity:.5;
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 48px;
+    padding-top: 32px; border-top: 1px solid var(--border);
   }
-  .eq i{
-    flex:1;
-    background:linear-gradient(to top, var(--accent), transparent);
-    opacity:.3;
-    animation:bar 1.8s ease-in-out infinite;
+  .hero-stat .num {
+    font-size: 1.5rem; font-weight: 700; color: var(--accent);
   }
-  @keyframes bar{
-    0%,100%{height:6%;}
-    50%{height:var(--h,60%);}
+  .hero-stat .label {
+    font-size: .78rem; color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: 1px; margin-top: 2px;
   }
-  .hero-inner{position:relative; z-index:2;}
-  .hero h1{
-    font-size:clamp(48px,9vw,116px);
-    margin:18px 0 22px;
+  .hero-visual {
+    position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(212,162,78,.15) 0%, transparent 70%);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    animation: float 6s ease-in-out infinite;
   }
-  .hero h1 .line{display:block;}
-  .hero h1 .accented{color:var(--accent);}
-  .hero-sub{
-    max-width:540px; color:var(--muted); font-size:17px; line-height:1.65;
-    margin-bottom:40px;
-  }
-  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
-  .btn{
-    font-family:'Space Mono',monospace; font-size:12.5px; letter-spacing:.08em;
-    text-transform:uppercase;
-    padding:15px 26px;
-    border-radius:100px;
-    display:inline-flex; align-items:center; gap:8px;
-    transition:transform .18s ease, background .2s, border-color .2s, color .2s;
-    cursor:pointer; border:1px solid transparent;
-  }
-  .btn:hover{transform:translateY(-2px);}
-  .btn-solid{background:var(--accent); color:#100E0C;}
-  .btn-ghost{border-color:var(--line); color:var(--ink);}
-  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
-
-  /* ---------- MARQUEE ---------- */
-  .marquee{
-    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-    overflow:hidden; white-space:nowrap; background:var(--bg-elevated);
-  }
-  .marquee-track{
-    display:inline-block; padding:16px 0;
-    animation:scroll 28s linear infinite;
-  }
-  .marquee-track span{
-    font-family:'Space Mono',monospace; font-size:13px; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--muted); margin:0 26px;
-  }
-  .marquee-track span.hi{color:var(--accent);}
-  @keyframes scroll{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
-
-  /* ---------- ABOUT ---------- */
-  .about-grid{
-    display:grid; grid-template-columns:1.1fr .9fr; gap:70px; align-items:start;
-  }
-  .about-copy p{color:var(--text-secondary); font-size:16px; line-height:1.75; margin-bottom:18px; max-width:520px;}
-  .about-copy p strong{color:var(--ink);}
-  .stat-list{
-    border-top:1px solid var(--line);
-  }
-  .stat{
-    display:flex; justify-content:space-between; align-items:baseline;
-    padding:20px 0; border-bottom:1px solid var(--line);
-    font-family:'Space Mono',monospace;
-  }
-  .stat .k{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
-  .stat .v{font-family:'Anton',sans-serif; font-size:26px; text-transform:none;}
-
-  /* ---------- BOOKING ---------- */
-  .booking{background:var(--bg-elevated); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .booking-grid{display:grid; grid-template-columns:.85fr 1.15fr; gap:70px; align-items:start;}
-  .booking-copy p{color:var(--text-secondary); font-size:16px; line-height:1.75; margin-bottom:16px; max-width:440px;}
-  .package-list{margin-top:28px; display:flex; flex-direction:column; gap:0;}
-  .package{
-    display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);
-    font-family:'Space Mono',monospace; font-size:13px;
-  }
-  .package .p-name{color:var(--ink); text-transform:uppercase; letter-spacing:.05em;}
-  .package .p-rate{color:var(--muted);}
-  .package.hl .p-rate{color:var(--accent);}
-
-  form{
-    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius);
-    padding:34px;
-  }
-  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
-  .field{display:flex; flex-direction:column; gap:8px; margin-bottom:16px;}
-  .field label{
-    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
-  }
-  .field input, .field select, .field textarea{
-    background:var(--bg-elevated); border:1px solid var(--line); color:var(--ink);
-    padding:13px 14px; font-family:'Inter',sans-serif; font-size:14.5px; border-radius:2px;
-    width:100%;
-  }
-  .field select{appearance:none; cursor:pointer;}
-  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--accent); outline:none;}
-  .field textarea{resize:vertical; min-height:80px;}
-  .submit-row{display:flex; align-items:center; gap:16px; margin-top:6px; flex-wrap:wrap;}
-  .form-note{font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); line-height:1.6;}
-
-  /* ---------- SILENT DISCO ---------- */
-  .disco-list{border-top:1px solid var(--line);}
-  .disco-row{
-    display:grid; grid-template-columns:110px 1fr auto auto; gap:24px; align-items:center;
-    padding:24px 0; border-bottom:1px solid var(--line);
-  }
-  .disco-date{font-family:'Space Mono',monospace; display:flex; flex-direction:column; line-height:1.3;}
-  .disco-date .dd{font-size:11px; letter-spacing:.1em; color:var(--accent);}
-  .disco-date .dm{font-size:18px; color:var(--ink);}
-  .disco-info h3{font-family:'Anton',sans-serif; text-transform:uppercase; font-size:20px; margin-bottom:4px;}
-  .disco-info p{font-size:13.5px; color:var(--muted);}
-  .disco-price{font-family:'Space Mono',monospace; font-size:14px; color:var(--ink); white-space:nowrap;}
-  .rsvp{
-    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--ink); border:1px solid var(--line); padding:9px 15px; border-radius:100px;
-    transition:all .2s; white-space:nowrap;
-  }
-  .rsvp:hover{border-color:var(--accent); color:var(--accent);}
-  .disco-note{
-    margin-top:22px; font-family:'Space Mono',monospace; font-size:12px; color:var(--muted);
+  .hero-visual .emoji { font-size: 10rem; filter: drop-shadow(0 0 40px rgba(212,162,78,.3)); }
+  @keyframes float {
+    0%,100% { transform: translateY(-50%) translateX(0); }
+    50%     { transform: translateY(-53%) translateX(-8px); }
   }
 
-  /* ---------- TICKETING ---------- */
-  .tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:44px;}
-  .tier{
-    border:1px solid var(--line); border-radius:var(--radius); padding:30px 26px;
-    display:flex; flex-direction:column; gap:14px;
-    transition:border-color .25s;
+  /* ===== SECTIONS ===== */
+  section { padding: 80px 5%; }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header .tag {
+    display: inline-block;
+    font-size: .75rem; font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 12px;
   }
-  .tier.featured{border-color:var(--accent); background:var(--bg-elevated);}
-  .tier-name{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
-  .tier-price{font-family:'Anton',sans-serif; font-size:40px;}
-  .tier-price sup{font-family:'Space Mono',monospace; font-size:14px; margin-left:4px; color:var(--muted);}
-  .tier ul{list-style:none; font-size:13.5px; color:var(--text-secondary); line-height:2; margin:6px 0 10px;}
-  .tier ul li::before{content:"— "; color:var(--muted);}
-  .stepper{display:flex; align-items:center; gap:14px; margin-top:auto;}
-  .stepper button{
-    width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--ink);
-    font-size:16px; cursor:pointer; font-family:'Space Mono',monospace;
+  .section-header h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
   }
-  .stepper button:hover{border-color:var(--accent); color:var(--accent);}
-  .stepper .qty{font-family:'Space Mono',monospace; min-width:18px; text-align:center;}
-  .tier-btn{
-    margin-top:10px; text-align:center; padding:13px; border-radius:100px;
-    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
-    background:var(--invert-bg); color:var(--invert-text); cursor:pointer; border:none;
-  }
-  .tier-btn:hover{background:var(--accent);}
-
-  .ticket-summary{
-    background:var(--bg-elevated); border:1px dashed var(--line); border-radius:var(--radius);
-    padding:30px; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center;
-  }
-  .ref{font-family:'Space Mono',monospace; font-size:13px; color:var(--muted);}
-  .ref b{color:var(--ink); letter-spacing:.05em;}
-  .momo-steps{font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); line-height:2; margin-top:10px;}
-  .momo-steps b{color:var(--ink);}
-
-  /* ---------- GALLERY ---------- */
-  .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
-  .gallery img{
-    width:100%; height:220px; object-fit:cover; border-radius:2px; filter:grayscale(.15) contrast(1.05);
-    transition:filter .3s;
-  }
-  .gallery a:hover img{filter:none;}
-  .gallery a:nth-child(1){grid-row:span 2; height:100%;}
-  .gallery a:nth-child(1) img{height:100%;}
-
-  /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--line); padding:70px 0 30px;}
-  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:50px; margin-bottom:60px;}
-  .footer-brand h3{font-size:32px; margin-bottom:14px;}
-  .footer-brand p{color:var(--muted); font-size:14px; max-width:280px; line-height:1.6;}
-  .foot-col{display:flex; flex-direction:column; gap:12px;}
-  .foot-col .k{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px;}
-  .foot-col a, .foot-col span{font-size:14.5px; color:var(--text-secondary);}
-  .foot-col a:hover{color:var(--accent);}
-  .footer-bottom{
-    display:flex; justify-content:space-between; align-items:center; padding-top:24px; border-top:1px solid var(--line);
-    font-family:'Space Mono',monospace; font-size:11.5px; color:var(--muted); flex-wrap:wrap; gap:10px;
+  .section-header p {
+    color: var(--text-dim); max-width: 520px; margin: 12px auto 0;
   }
 
-  @media (max-width:900px){
-    .about-grid, .booking-grid{grid-template-columns:1fr; gap:40px;}
-    .tiers{grid-template-columns:1fr;}
-    .gallery{grid-template-columns:1fr 1fr;}
-    .gallery a:nth-child(1){grid-row:span 1; height:220px;}
-    .footer-grid{grid-template-columns:1fr;}
-    .form-row{grid-template-columns:1fr;}
-    .disco-row{grid-template-columns:1fr; gap:8px; text-align:left;}
-    .disco-price{order:3;}
-    .rsvp{order:4; align-self:flex-start;}
+  /* ===== CATEGORIES ===== */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
-  @media (max-width:600px){
-    .section{padding:70px 0;}
+  .cat-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
   }
+  .cat-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(212,162,78,.1);
+  }
+  .cat-card .cat-icon {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .cat-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+  .cat-card .cat-count {
+    font-size: .78rem; color: var(--text-dim);
+  }
+
+  /* ===== PRODUCTS ===== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+  }
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    cursor: pointer;
+    position: relative;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,.4);
+    border-color: rgba(212,162,78,.3);
+  }
+  .product-img {
+    width: 100%; aspect-ratio:1;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .5s;
+  }
+  .product-card:hover .product-img img { transform: scale(1.06); }
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--accent);
+    color: #000;
+    font-size: .68rem; font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+  }
+  .product-badge.sold { background: var(--danger); color: #fff; }
+  .product-badge.new  { background: var(--green); color: #fff; }
+  .product-info { padding: 20px; }
+  .product-info .cat-label {
+    font-size: .72rem; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .product-info h3 {
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .product-bottom { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-size: 1.15rem; font-weight: 700; color: var(--accent);
+  }
+  .product-price small {
+    font-size: .75rem; font-weight: 400; color: var(--text-dim);
+  }
+  .add-cart {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .95rem;
+    transition: background .2s, border-color .2s;
+  }
+  .add-cart:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  /* ===== WHATSAPP ORDER BUTTON ===== */
+  .whatsapp-order {
+    background: #25D366;
+    color: #fff;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    transition: transform .2s, box-shadow .2s;
+    text-decoration: none;
+  }
+  .whatsapp-order:hover { transform: scale(1.12); box-shadow: 0 4px 16px rgba(37,211,102,.4); }
+
+  /* ===== FLOATING WHATSAPP FAB ===== */
+  .whatsapp-fab {
+    position: fixed;
+    bottom: 28px; left: 28px;
+    width: 56px; height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 6px 24px rgba(37,211,102,.4);
+    z-index: 50;
+    transition: transform .25s, box-shadow .25s;
+    text-decoration: none;
+  }
+  .whatsapp-fab:hover { transform: scale(1.12); box-shadow: 0 8px 32px rgba(37,211,102,.55); }
+  .whatsapp-fab-pulse {
+    position: fixed;
+    bottom: 28px; left: 28px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(37,211,102,.3);
+    z-index: 49;
+    animation: waPulse 2s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes waPulse {
+    0%   { transform: scale(1);   opacity: .6; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .whatsapp-tooltip {
+    position: fixed;
+    bottom: 92px; left: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    font-size: .82rem;
+    color: var(--text);
+    white-space: nowrap;
+    z-index: 50;
+    opacity: 0; visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .3s, visibility .3s, transform .3s;
+    box-shadow: var(--shadow);
+  }
+  .whatsapp-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 20px;
+    width: 12px; height: 12px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transform: rotate(45deg);
+  }
+  .whatsapp-fab:hover + .whatsapp-tooltip { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  /* ===== FEATURED BANNER ===== */
+  .featured-banner {
+    background: linear-gradient(135deg, rgba(212,162,78,.08), rgba(212,162,78,.03));
+    border: 1px solid rgba(212,162,78,.15);
+    border-radius: 20px;
+    padding: 60px;
+    display: flex; align-items: center; gap: 56px;
+    overflow: hidden;
+    position: relative;
+  }
+  .featured-banner .fb-content { flex: 1; z-index: 2; }
+  .featured-banner .fb-content .tag {
+    display: inline-block;
+    font-size: .72rem; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    background: rgba(212,162,78,.12);
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .featured-banner h2 {
+    font-size: 2.2rem; font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+  .featured-banner p { color: var(--text-dim); margin-bottom: 28px; max-width: 440px; }
+  .fb-visual {
+    flex: 0 0 280px; height: 280px;
+    background: rgba(212,162,78,.06);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8rem;
+  }
+
+  /* ===== FEATURES ===== */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 28px;
+    text-align: center;
+    transition: border-color .3s, transform .3s;
+  }
+  .feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .feature-card .f-icon {
+    font-size: 2.2rem; margin-bottom: 16px;
+  }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .feature-card p { font-size: .85rem; color: var(--text-dim); }
+
+  /* ===== NEWSLETTER ===== */
+  .newsletter {
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 60px 40px;
+  }
+  .newsletter h2 {
+    font-size: 1.8rem; font-weight: 800; margin-bottom: 10px;
+  }
+  .newsletter p { color: var(--text-dim); margin-bottom: 28px; }
+  .nl-form {
+    display: flex; gap: 10px; max-width: 440px; margin: 0 auto;
+  }
+  .nl-form input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 14px 20px;
+    color: var(--text);
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .nl-form input:focus { border-color: var(--accent); }
+  .nl-form input::placeholder { color: var(--text-dim); }
+  .nl-form button {
+    padding: 14px 28px;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: .9rem;
+    border-radius: 50px;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .nl-form button:hover { background: var(--accent2); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .nav-brand { display: inline-block; margin-bottom: 12px; }
+  .footer-brand p { color: var(--text-dim); font-size: .88rem; max-width: 300px; }
+  .footer-col h4 {
+    font-size: .82rem; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    font-size: .88rem; color: var(--text-dim);
+    transition: color .2s;
+  }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: .8rem; color: var(--text-dim);
+  }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem;
+    transition: border-color .2s, background .2s;
+  }
+  .footer-socials a:hover { border-color: var(--accent); background: rgba(212,162,78,.1); }
+
+  /* ===== SCROLL TO TOP ===== */
+  .scroll-top {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 44px; height: 44px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(212,162,78,.3);
+    z-index: 50;
+    opacity:0; visibility:hidden;
+    transform: translateY(12px);
+    transition: opacity .3s, visibility .3s, transform .3s;
+  }
+  .scroll-top.visible { opacity:1; visibility:visible; transform: translateY(0); }
+  .scroll-top:hover { background: var(--accent2); transform: scale(1.08); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero-visual { display: none; }
+    .hero { min-height: 70vh; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-banner { flex-direction: column; padding: 40px; }
+    .fb-visual { flex: none; width: 200px; height: 200px; font-size: 5rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-search { display: none; }
+    .hamburger { display: flex; }
+    .hero h1 { font-size: 2.2rem; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .nl-form { flex-direction: column; }
+    section { padding: 56px 5%; }
+  }
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { flex-direction: column; gap: 16px; }
+  }
+
+  /* ===== MOBILE MENU ===== */
+  .mobile-menu {
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 5%;
+    display: flex; flex-direction: column; gap: 16px;
+    z-index: 99;
+    transform: translateY(-110%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a {
+    font-size: 1rem; font-weight: 500; color: var(--text-dim);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color .2s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .6s, transform .6s;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
-<header>
-  <nav class="wrap">
-    <a href="#top" class="logo">GHOUSE<span>·</span>RECORDS</a>
-    <div class="nav-right">
-      <div class="navlinks">
-        <a href="#booking">Book Studio</a>
-        <a href="#disco">Silent Disco</a>
-        <a href="#tickets">Tickets</a>
-        <a href="#gallery">Gallery</a>
-        <a class="ig" href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener">@ghouserecordsug</a>
-      </div>
-      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle light / dark mode">
-        <span class="icon-sun" aria-hidden="true">☀</span>
-        <span class="icon-moon" aria-hidden="true">☾</span>
-      </button>
+<!-- AGE GATE -->
+<div class="age-gate" id="ageGate">
+  <div class="age-gate-box">
+    <div class="logo-lg">Bros</div>
+    <p>Are you over 21 years of age?</p>
+    <div class="age-btns">
+      <button class="btn-yes" onclick="enterSite()">Yes, I am</button>
+      <button class="btn-no" onclick="window.location='https://google.com'">No</button>
     </div>
-  </nav>
-</header>
-
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="eq" id="eq" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
-      <p class="eyebrow">Kiwatule, Kampala <em>·</em> Recording Studio &amp; Label</p>
-      <h1>
-        <span class="line">BUILT TO</span>
-        <span class="line accented">RECORD.</span>
-      </h1>
-      <p class="hero-sub">Ghouse Records is a working recording studio in Kiwatule — tracking, mixing and mastering, day in and day out. Once a month, the same floor clears out for a silent disco night.</p>
-
-      <div class="hero-cta">
-        <a href="#booking" class="btn btn-solid">Book a session</a>
-        <a href="#disco" class="btn btn-ghost">Silent disco nights</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marqueeTrack"></div>
   </div>
+</div>
 
-  <!-- ABOUT -->
-  <section class="section" id="about">
-    <div class="wrap about-grid">
-      <div class="about-copy">
-        <p class="eyebrow" style="margin-bottom:18px;">The studio</p>
-        <p><strong>Ghouse Records started as a booth in Kiwatule</strong> built for artists who needed somewhere honest to record — no gatekeeping, no rush. Five years on it's a full studio, a small stable of signed acts, and a label that puts out what gets made here.</p>
-        <p>Most days, the room is booked for tracking, mixing and mastering. Once a month, on a Saturday, the gear gets cleared and the same floor turns into a silent disco — headsets on, one night, Kiwatule.</p>
-        <p>Sessions, nights, tickets — everything routes through this page.</p>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-brand">Bros</a>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#products">Shop</a></li>
+    <li><a href="#featured">Featured</a></li>
+    <li><a href="#features">Why Us</a></li>
+  </ul>
+  <div class="nav-actions">
+    <input type="text" class="nav-search" placeholder="Search products...">
+    <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'd%20like%20to%20place%20an%20order." target="_blank" class="cart-btn" style="text-decoration:none;">
+      💬
+      <span class="cart-badge">WA</span>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" onclick="closeMenu()">Home</a>
+  <a href="#categories" onclick="closeMenu()">Categories</a>
+  <a href="#products" onclick="closeMenu()">Shop</a>
+  <a href="#featured" onclick="closeMenu()">Featured</a>
+  <a href="#features" onclick="closeMenu()">Why Us</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content fade-up">
+    <div class="hero-tag">🔥 Uganda's #1 Smoke Shop</div>
+    <h1>Elevate Your <span class="gold">Experience</span> With Premium Gear</h1>
+    <p>From top-tier vapes and grinders to handcrafted lighters and rolling essentials — Bros has everything for the connoisseur in you.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'd%20like%20to%20place%20an%20order." target="_blank" class="btn-primary">Shop Now</a>
+      <a href="#categories" class="btn-ghost">Browse Categories</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">280+</div>
+        <div class="label">Products</div>
       </div>
-      <div class="stat-list">
-        <div class="stat"><span class="k">Based in</span><span class="v">Kiwatule</span></div>
-        <div class="stat"><span class="k">Running since</span><span class="v">2021</span></div>
-        <div class="stat"><span class="k">Studio bookings</span><span class="v">Daily</span></div>
-        <div class="stat"><span class="k">Silent disco</span><span class="v">Monthly</span></div>
+      <div class="hero-stat">
+        <div class="num">15K+</div>
+        <div class="label">Happy Customers</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">4.9★</div>
+        <div class="label">Rating</div>
       </div>
     </div>
-  </section>
+  </div>
+  <div class="hero-visual">
+    <div class="emoji">🌿</div>
+  </div>
+</section>
 
-  <!-- BOOKING -->
-  <section class="section booking" id="booking">
-    <div class="wrap booking-grid">
-      <div class="booking-copy">
-        <p class="eyebrow" style="margin-bottom:18px;">The main thing</p>
-        <h2 style="margin-bottom:20px;">Book a<br>Session</h2>
-        <p>The booth that started it all is still booked out most days. Recording, mixing, mastering or full-day rehearsal blocks — tell us what you need and a producer confirms your slot over WhatsApp.</p>
-        <div class="package-list">
-          <div class="package hl"><span class="p-name">Recording (2 hrs)</span><span class="p-rate">UGX 30,000</span></div>
-          <div class="package"><span class="p-name">Mixing (per track)</span><span class="p-rate">UGX 150,000</span></div>
-          <div class="package"><span class="p-name">Mastering (per track)</span><span class="p-rate">UGX 80,000</span></div>
-          <div class="package"><span class="p-name">Full day block (8hrs)</span><span class="p-rate">UGX 350,000</span></div>
-        </div>
-      </div>
-
-      <form id="bookingForm">
-        <div class="form-row">
-          <div class="field">
-            <label for="b-name">Your name</label>
-            <input id="b-name" type="text" required placeholder="Full name">
-          </div>
-          <div class="field">
-            <label for="b-phone">Phone / WhatsApp</label>
-            <input id="b-phone" type="tel" required placeholder="07XX XXX XXX">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="b-date">Preferred date</label>
-            <input id="b-date" type="date" required>
-          </div>
-          <div class="field">
-            <label for="b-time">Preferred time</label>
-            <input id="b-time" type="time" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="b-package">Session type</label>
-            <select id="b-package">
-              <option>Recording</option>
-              <option>Mixing</option>
-              <option>Mastering</option>
-              <option>Full day block</option>
-              <option>Rehearsal space</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="b-artists">Number of artists</label>
-            <input id="b-artists" type="number" min="1" value="1">
-          </div>
-        </div>
-        <div class="field">
-          <label for="b-notes">Anything the producer should know</label>
-          <textarea id="b-notes" placeholder="Genre, reference tracks, engineer preference…"></textarea>
-        </div>
-        <div class="submit-row">
-          <button type="submit" class="btn btn-solid" style="border:none;">Send booking request →</button>
-          <span class="form-note">Opens WhatsApp with your details pre-filled.<br>A producer confirms the slot within a day.</span>
-        </div>
-      </form>
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-header fade-up">
+    <div class="tag">Browse</div>
+    <h2>Popular Categories</h2>
+    <p>Find exactly what you're looking for across our curated collection.</p>
+  </div>
+  <div class="categories-grid">
+    <div class="cat-card fade-up">
+      <span class="cat-icon">💨</span>
+      <h3>Vapes</h3>
+      <span class="cat-count">45+ products</span>
     </div>
-  </section>
-
-  <!-- SILENT DISCO -->
-  <section class="section" id="disco">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Once a month</p>
-        <h2>Silent Disco Night</h2>
-        <p>One Saturday a month, the studio floor clears and the headsets come out. Same room, different rules — quiet outside, loud inside.</p>
-      </div>
-
-      <div class="disco-list" id="discoList">
-        <div class="disco-row">
-          <div class="disco-date"><span class="dd">SAT</span><span class="dm">AUG 30</span></div>
-          <div class="disco-info">
-            <h3>Silent Disco Night</h3>
-            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
-          </div>
-          <div class="disco-price">UGX 30,000</div>
-          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 30 Aug)">RSVP →</a>
-        </div>
-        <div class="disco-row">
-          <div class="disco-date"><span class="dd">SAT</span><span class="dm">SEP 27</span></div>
-          <div class="disco-info">
-            <h3>Silent Disco Night</h3>
-            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
-          </div>
-          <div class="disco-price">UGX 30,000</div>
-          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 27 Sep)">RSVP →</a>
-        </div>
-        <div class="disco-row">
-          <div class="disco-date"><span class="dd">SAT</span><span class="dm">OCT 25</span></div>
-          <div class="disco-info">
-            <h3>Silent Disco Night</h3>
-            <p>Ghouse Records Studio, Kiwatule · Doors 8PM</p>
-          </div>
-          <div class="disco-price">UGX 30,000</div>
-          <a class="rsvp" href="#" data-event="Silent Disco Night (Sat 25 Oct)">RSVP →</a>
-        </div>
-      </div>
-      <p class="disco-note">Held the last Saturday of every month. Dates confirmed on Instagram closer to the night.</p>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">📄</span>
+      <h3>Rolling Papers</h3>
+      <span class="cat-count">30+ products</span>
     </div>
-  </section>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">⚙️</span>
+      <h3>Grinders</h3>
+      <span class="cat-count">20+ products</span>
+    </div>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🔥</span>
+      <h3>Lighters</h3>
+      <span class="cat-count">35+ products</span>
+    </div>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🍽️</span>
+      <h3>Rolling Trays</h3>
+      <span class="cat-count">18+ products</span>
+    </div>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🚬</span>
+      <h3>Bongs &amp; Pipes</h3>
+      <span class="cat-count">22+ products</span>
+    </div>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🏁</span>
+      <h3>Ashtrays</h3>
+      <span class="cat-count">15+ products</span>
+    </div>
+    <div class="cat-card fade-up">
+      <span class="cat-icon">🧢</span>
+      <h3>Accessories</h3>
+      <span class="cat-count">40+ products</span>
+    </div>
+  </div>
+</section>
 
-  <!-- TICKETING -->
-  <section class="section" id="tickets">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">For the next disco night</p>
-        <h2>Get Tickets</h2>
-        <p>Pick a tier, choose your headcount, and check out over WhatsApp or MTN MoMo. Your reference code is your ticket at the door.</p>
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-header fade-up">
+    <div class="tag">Best Sellers</div>
+    <h2>Top Products</h2>
+    <p>Handpicked favorites that our customers can't stop talking about.</p>
+  </div>
+  <div class="products-grid">
+    <!-- Product 1 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2026/08/Picsart_26-08-03_17-30-57-433.jpg?w=800&ssl=1" alt="Tugboat T12000">
+        <span class="product-badge new">New</span>
       </div>
-
-      <div class="tiers" id="tiersGrid">
-        <div class="tier" data-tier="General" data-price="30000">
-          <span class="tier-name">General Floor</span>
-          <span class="tier-price">30k<sup>UGX</sup></span>
-          <ul>
-            <li>Entry + wireless headset</li>
-            <li>Full night access</li>
-            <li>Standing floor</li>
-          </ul>
-          <div class="stepper">
-            <button type="button" class="qty-minus">−</button>
-            <span class="qty">1</span>
-            <button type="button" class="qty-plus">+</button>
-          </div>
-          <button class="tier-btn" type="button">Add to order</button>
+      <div class="product-info">
+        <div class="cat-label">Vapes</div>
+        <h3>Tugboat T12000</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 150,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Tugboat%20T12000%20(UGX%20150%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
         </div>
-
-        <div class="tier featured" data-tier="VIP Booth" data-price="70000">
-          <span class="tier-name">VIP Booth</span>
-          <span class="tier-price">70k<sup>UGX</sup></span>
-          <ul>
-            <li>Reserved VIP booth</li>
-            <li>Priority headset</li>
-            <li>2 house drinks included</li>
-          </ul>
-          <div class="stepper">
-            <button type="button" class="qty-minus">−</button>
-            <span class="qty">1</span>
-            <button type="button" class="qty-plus">+</button>
-          </div>
-          <button class="tier-btn" type="button">Add to order</button>
-        </div>
-
-        <div class="tier" data-tier="Group of 5" data-price="130000">
-          <span class="tier-name">Group of 5</span>
-          <span class="tier-price">130k<sup>UGX</sup></span>
-          <ul>
-            <li>5 general floor entries</li>
-            <li>5 headsets included</li>
-            <li>Best for crews &amp; label fam</li>
-          </ul>
-          <div class="stepper">
-            <button type="button" class="qty-minus">−</button>
-            <span class="qty">1</span>
-            <button type="button" class="qty-plus">+</button>
-          </div>
-          <button class="tier-btn" type="button">Add to order</button>
-        </div>
-      </div>
-
-      <div class="ticket-summary">
-        <div>
-          <p class="ref">Order reference <b id="refCode">—</b></p>
-          <div class="momo-steps" id="momoSteps">
-            Select a tier above to generate your reference code, then:<br>
-            <b>1.</b> Send payment via MTN MoMo to <b>+256 706 612 367</b> (Ghouse Records)<br>
-            <b>2.</b> Use your reference code as the payment comment<br>
-            <b>3.</b> Confirm on WhatsApp — we'll text your e-ticket back
-          </div>
-        </div>
-        <a id="ticketWA" class="btn btn-solid" href="#" target="_blank" rel="noopener">Confirm on WhatsApp →</a>
       </div>
     </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="section" id="gallery">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">In the room</p>
-        <h2>Gallery</h2>
+    <!-- Product 2 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2025/08/Picsart_25-08-07_12-48-41-258.jpg?w=1080&ssl=1" alt="ElfBar BC10000">
       </div>
-      <div class="gallery">
-        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=900&q=80" alt="Producer at the mixing desk"></a>
-        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=700&q=80" alt="Crowd wearing silent disco headphones"></a>
-        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1571266028243-e4bb35c0b13a?w=700&q=80" alt="Studio microphone in the booth"></a>
-        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=700&q=80" alt="DJ set at Ghouse Records"></a>
+      <div class="product-info">
+        <div class="cat-label">Vapes</div>
+        <h3>ElfBar BC10000</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 140,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20ElfBar%20BC10000%20(UGX%20140%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
       </div>
     </div>
-  </section>
+    <!-- Product 3 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2023/08/Picsart_24-10-24_15-30-54-742.jpg?w=1218&ssl=1" alt="Mylar Bags">
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Accessories</div>
+        <h3>Mylar Bags</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 65,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Mylar%20Bags%20(UGX%2065%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2026/03/Picsart_26-03-31_12-36-44-205.jpg?w=699&ssl=1" alt="Debang Quad Jet Lighter">
+        <span class="product-badge">Hot</span>
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Lighters</div>
+        <h3>Debang Quad Jet Lighter</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 60,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Debang%20Quad%20Jet%20Lighter%20(UGX%2060%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2026/03/Picsart_26-03-19_18-08-15-925.jpg?w=1080&ssl=1" alt="EmberVault Portable Ashtray">
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Ashtrays</div>
+        <h3>EmberVault Portable Ashtray</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 45,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20EmberVault%20Portable%20Ashtray%20(UGX%2045%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2022/12/Picsart_22-10-25_11-42-13-733.png?w=1463&ssl=1" alt="Icy Crushers">
+        <span class="product-badge">Best Seller</span>
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Grinders</div>
+        <h3>Icy Crushers</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 75,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Icy%20Crushers%20(UGX%2075%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+    <!-- Product 7 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2023/01/1726223842990.png?w=640&ssl=1" alt="Zengaz Jet Lighters">
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Lighters</div>
+        <h3>Zengaz Jet Lighters</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 45,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Zengaz%20Jet%20Lighters%20(UGX%2045%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+    <!-- Product 8 -->
+    <div class="product-card fade-up">
+      <div class="product-img">
+        <img src="https://i0.wp.com/ination420.com/wp-content/uploads/2023/08/lipstick-portable-pipe.webp?w=1000&ssl=1" alt="Lipstick Pipe">
+      </div>
+      <div class="product-info">
+        <div class="cat-label">Bongs & Pipes</div>
+        <h3>Lipstick Pipe</h3>
+        <div class="product-bottom">
+          <span class="product-price">UGX 40,000</span>
+          <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Lipstick%20Pipe%20(UGX%2040%2C000)." target="_blank" class="whatsapp-order" title="Order via WhatsApp">💬</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top: 40px;">
+    <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'd%20like%20to%20see%20your%20full%20catalog." target="_blank" class="btn-primary" style="display:inline-block;">View All Products on WhatsApp →</a>
+  </div>
+</section>
 
-</main>
+<!-- FEATURED BANNER -->
+<section id="featured">
+  <div class="featured-banner fade-up">
+    <div class="fb-content">
+      <div class="tag">⭐ Featured</div>
+      <h2>Cabissi THC Vapes</h2>
+      <p>With an oil composition of 70% THC and 30% CBD, Cabissi delivers a long-lasting mellow buzz with an instant effect. Available in Limoncello and Pineapple flavors.</p>
+      <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I'm%20interested%20in%20the%20Cabissi%20THC%20Vape." target="_blank" class="btn-primary">Order Cabissi on WhatsApp →</a>
+    </div>
+    <div class="fb-visual">🍇</div>
+  </div>
+</section>
 
+<!-- WHY US -->
+<section id="features">
+  <div class="section-header fade-up">
+    <div class="tag">Why Bros</div>
+    <h2>Built Different</h2>
+    <p>We don't just sell products — we deliver an experience.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="f-icon">🚀</div>
+      <h3>Same-Day Delivery</h3>
+      <p>Order before 5 PM and get it delivered the same day across Kampala.</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="f-icon">✅</div>
+      <h3>100% Authentic</h3>
+      <p>Every product is sourced directly from trusted manufacturers. No fakes.</p>
+    </div>
+      <a href="https://wa.me/256780844098?text=Hi%20Bros!%20I%20have%20a%20question." target="_blank" class="feature-card fade-up" style="text-decoration:none;">
+      <div class="f-icon">💬</div>
+      <h3>24/7 WhatsApp Support</h3>
+      <p>Got questions? Our team is always ready on WhatsApp — just tap to chat.</p>
+    </a>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section>
+  <div class="newsletter fade-up">
+    <h2>Join the Crew 🔥</h2>
+    <p>Get exclusive drops, early access to new products, and member-only discounts.</p>
+    <div class="nl-form">
+      <input type="email" placeholder="Enter your email">
+      <button type="button">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <div class="wrap">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>GHOUSE<br>RECORDS</h3>
-        <p>Recording studio and label in Kiwatule, Kampala — with a silent disco night once a month.</p>
-      </div>
-      <div class="foot-col">
-        <span class="k">Visit</span>
-        <span>Kiwatule, Kampala, Uganda</span>
-        <span class="k" style="margin-top:10px;">Contact</span>
-        <a href="https://wa.me/256706612367" target="_blank" rel="noopener">WhatsApp: +256 706 612 367</a>
-        <a href="mailto:booking@ghouserecords.ug">booking@ghouserecords.ug</a>
-      </div>
-      <div class="foot-col">
-        <span class="k">Follow</span>
-        <a href="https://www.instagram.com/ghouserecordsug" target="_blank" rel="noopener">Instagram — @ghouserecordsug</a>
-        <span class="k" style="margin-top:10px;">On this site</span>
-        <a href="#booking">Studio bookings</a>
-        <a href="#disco">Silent disco nights</a>
-        <a href="#tickets">Tickets</a>
-      </div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-brand">Bros</div>
+      <p>Uganda's premium destination for vapes, rolling accessories, grinders, lighters, and everything smoke culture.</p>
+      <a href="https://wa.me/256780844098" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:#25D366;color:#fff;padding:8px 18px;border-radius:50px;font-size:.85rem;font-weight:600;transition:transform .2s;">
+        💬 WhatsApp: 0780 844 098
+      </a>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Ghouse Records, Kiwatule.</span>
-      <span>Built for the studio, run from the floor.</span>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">Vapes</a></li>
+        <li><a href="#">Rolling Papers</a></li>
+        <li><a href="#">Grinders</a></li>
+        <li><a href="#">Lighters</a></li>
+        <li><a href="#">Bongs &amp; Pipes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Bros. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#" title="Instagram">📷</a>
+      <a href="#" title="Twitter">🐦</a>
+      <a href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" title="WhatsApp" style="background:#25D366;border-color:#25D366;color:#fff;">💬</a>
+      <a href="#" title="TikTok">🎵</a>
     </div>
   </div>
 </footer>
 
+<!-- FLOATING WHATSAPP -->
+<div class="whatsapp-fab-pulse"></div>
+<a href="https://wa.me/256780844098?text=Hi%20Bros!%20I%20need%20help%20with%20an%20order." target="_blank" class="whatsapp-fab" title="Chat on WhatsApp">💬</a>
+<div class="whatsapp-tooltip">Chat with us on WhatsApp</div>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0})">↑</button>
+
 <script>
-  // build equalizer bars
-  const eq = document.getElementById('eq');
-  const barCount = 40;
-  for(let i=0;i<barCount;i++){
-    const bar = document.createElement('i');
-    const h = 20 + Math.random()*70;
-    bar.style.setProperty('--h', h+'%');
-    bar.style.animationDelay = (Math.random()*1.8)+'s';
-    bar.style.animationDuration = (1.3 + Math.random()*1.2)+'s';
-    eq.appendChild(bar);
+  // Age Gate
+  function enterSite() {
+    localStorage.setItem('bros_age_verified', '1');
+    document.getElementById('ageGate').classList.add('hidden');
+  }
+  if (localStorage.getItem('bros_age_verified')) {
+    document.getElementById('ageGate').classList.add('hidden');
   }
 
-  // marquee content
-  const words = ['RECORDING STUDIO','MIXING & MASTERING','BOOK A SESSION','KIWATULE','GHOUSE RECORDS','SILENT DISCO — ONCE A MONTH'];
-  const track = document.getElementById('marqueeTrack');
-  let mHTML = '';
-  for(let r=0;r<2;r++){
-    words.forEach((w,i)=>{ mHTML += `<span class="${i%3===0?'hi':''}">${w}</span>`; });
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
   }
-  track.innerHTML = mHTML;
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
 
-  const WHATSAPP_NUMBER = "256706612367";
-
-  // theme toggle
-  const themeToggle = document.getElementById('themeToggle');
-  themeToggle.addEventListener('click', ()=>{
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
-  });
-
-  // RSVP -> whatsapp
-  document.querySelectorAll('.rsvp').forEach(link=>{
-    link.addEventListener('click', e=>{
-      e.preventDefault();
-      const evt = link.dataset.event;
-      const msg = encodeURIComponent(`Hi Ghouse Records! I'd like to RSVP for: ${evt}. Please send payment details.`);
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  // Fade-up on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
     });
-  });
+  }, { threshold: 0.15 });
 
-  // booking form -> whatsapp
-  document.getElementById('bookingForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    const name = document.getElementById('b-name').value;
-    const phone = document.getElementById('b-phone').value;
-    const date = document.getElementById('b-date').value;
-    const time = document.getElementById('b-time').value;
-    const pkg = document.getElementById('b-package').value;
-    const artists = document.getElementById('b-artists').value;
-    const notes = document.getElementById('b-notes').value;
-    const msg = encodeURIComponent(
-      `Hi Ghouse Records! I'd like to book a session.\n`+
-      `Name: ${name}\nPhone: ${phone}\nDate: ${date}\nTime: ${time}\n`+
-      `Session: ${pkg}\nArtists: ${artists}\n`+
-      (notes ? `Notes: ${notes}\n` : '')
-    );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-  });
-
-  // ticketing
-  document.querySelectorAll('.tier').forEach(tier=>{
-    const minus = tier.querySelector('.qty-minus');
-    const plus = tier.querySelector('.qty-plus');
-    const qtyEl = tier.querySelector('.qty');
-    let qty = 1;
-    minus.addEventListener('click', ()=>{ qty = Math.max(1, qty-1); qtyEl.textContent = qty; });
-    plus.addEventListener('click', ()=>{ qty = Math.min(10, qty+1); qtyEl.textContent = qty; });
-
-    tier.querySelector('.tier-btn').addEventListener('click', ()=>{
-      const tierName = tier.dataset.tier;
-      const price = parseInt(tier.dataset.price,10);
-      const total = price*qty;
-      const ref = 'GHR-' + Math.random().toString(36).slice(2,7).toUpperCase();
-
-      document.getElementById('refCode').textContent = ref;
-      document.getElementById('momoSteps').innerHTML =
-        `<b>${qty}× ${tierName}</b> — total <b>UGX ${total.toLocaleString()}</b><br>`+
-        `<b>1.</b> Send UGX ${total.toLocaleString()} via MTN MoMo to <b>+256 706 612 367</b> (Ghouse Records)<br>`+
-        `<b>2.</b> Use <b>${ref}</b> as the payment comment<br>`+
-        `<b>3.</b> Tap "Confirm on WhatsApp" below — we'll text your e-ticket back`;
-
-      const msg = encodeURIComponent(
-        `Hi Ghouse Records! I'd like to confirm a ticket order.\n`+
-        `Tier: ${tierName}\nQty: ${qty}\nTotal: UGX ${total.toLocaleString()}\nReference: ${ref}\n`+
-        `I've sent payment via MTN MoMo — please confirm and send my e-ticket.`
-      );
-      document.getElementById('ticketWA').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-      document.querySelector('.ticket-summary').scrollIntoView({behavior:'smooth', block:'center'});
-    });
-  });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 </script>
-
 </body>
 </html>
