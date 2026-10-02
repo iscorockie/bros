@@ -291,8 +291,7 @@
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       window.setInterval(() => {
-        if (!document.hidden && !nodes.ageGate.hidden) return;
-        if (document.hidden) return;
+        if (document.hidden || !nodes.ageGate.hidden) return;
         changeHeroSlide(1);
       }, 7000);
     }
@@ -483,11 +482,6 @@
     } catch (_) {}
   }
 
-  function resetPage() {
-    state.page = 1;
-    renderCatalogue();
-  }
-
   function setSearch(query, options = {}) {
     state.query = String(query || '').trim();
     state.category = 'all';
@@ -520,7 +514,7 @@
             <span class="suggestion-price">${formatPrice(product.price)}</span>
           </button>`).join('')}
         <button class="suggestion-item suggestion-all" type="button" role="option" aria-selected="false" id="search-option-${matches.length}" data-search-all="true"><span class="suggestion-details"><strong>See all results for “${escapeHTML(query.trim())}”</strong></span><span aria-hidden="true">↗</span></button>`
-      : `<div class="suggestion-empty">No products match yet. Press Enter to search the full catalogue.</div>`;
+      : `<div class="suggestion-empty">No matches yet. Try another product name or category.</div>`;
     nodes.suggestions.innerHTML = markup;
     nodes.suggestions.hidden = false;
     nodes.searchInput.setAttribute('aria-expanded', 'true');
@@ -804,6 +798,7 @@
       nodes.searchInput.value = '';
       nodes.searchClear.hidden = true;
       state.page = 1;
+      updateSearchURL();
       renderCatalogue();
       scrollToCatalogue();
       return;

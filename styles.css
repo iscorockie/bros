@@ -705,7 +705,6 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
   .hero-stats strong { font-size: 1.3rem; }
   .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .promo-grid, .story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .promo-card:last-child, .story-card:last-child { display: none; }
   .product-rail { grid-auto-columns: calc((100% - 15px) / 2); }
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
   .stats-intro { grid-column: 1 / -1; }
@@ -778,7 +777,9 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
   .promo-section { padding: 13px 0 45px; }
   .promo-grid { gap: 10px; }
   .promo-card { min-height: 174px; padding: 14px 11px 12px 14px; border-radius: 15px; }
-  .promo-card:last-child { display: none; }
+  .promo-card:last-child { grid-column: 1 / -1; min-height: 154px; }
+  .promo-card:last-child .promo-copy { width: 62%; }
+  .promo-card:last-child .promo-image-wrap { width: 38%; }
   .promo-copy { width: 72%; }
   .promo-kicker { margin-bottom: 6px; font-size: .51rem; letter-spacing: .09em; }
   .promo-card h3 { font-size: 1.04rem; }
@@ -816,6 +817,7 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
   .product-add svg { width: 14px; height: 14px; }
   .story-section { padding: 0 0 47px; }
   .story-grid { gap: 9px; }
+  .story-card:last-child { grid-column: 1 / -1; }
   .story-card { min-height: 170px; padding: 12px 10px 10px 12px; border-radius: 14px; }
   .story-label { padding: 4px 7px; font-size: .49rem; }
   .story-content { min-height: 125px; }
