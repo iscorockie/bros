@@ -10,6 +10,7 @@
     wishlist: 'bros_wishlist_v2',
     session: 'bros_session_id',
     orders: 'bros_orders_v1',
+    viewed: 'bros_recently_viewed_v1',
   };
 
   const CATEGORY_DESCRIPTIONS = {
@@ -159,6 +160,11 @@
     checkoutSummaryBox: document.getElementById('checkoutSummaryBox'),
     orderConfirmationBox: document.getElementById('orderConfirmationBox'),
     toastRegion: document.getElementById('toastRegion'),
+    recentlyViewedSection: document.getElementById('recentlyViewedSection'),
+    recentlyViewedGrid: document.getElementById('recentlyViewedGrid'),
+    pdpZoom: document.getElementById('pdpZoom'),
+    pdpZoomImage: document.getElementById('pdpZoomImage'),
+    pdpZoomClose: document.getElementById('pdpZoomClose'),
   };
 
   init();
@@ -183,6 +189,7 @@
     renderProductHero();
     renderSpecs();
     renderRelatedProducts();
+    recordAndRenderRecentlyViewed();
     updateCartUI();
     updateWishlistUI();
     bindEvents();
@@ -340,6 +347,60 @@
     document.getElementById('pdpToggleWishlist')?.addEventListener('click', () => {
       toggleWishlist(p.id);
     });
+
+    document.getElementById('pdpImageContainer')?.addEventListener('click', () => openZoom(p));
+  }
+
+  function openZoom(product) {
+    if (!els.pdpZoom || !els.pdpZoomImage) return;
+    els.pdpZoomImage.src = product.image;
+    els.pdpZoomImage.alt = product.name;
+    els.pdpZoom.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeZoom() {
+    if (!els.pdpZoom) return;
+    els.pdpZoom.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  function recordAndRenderRecentlyViewed() {
+    const currentId = state.product.id;
+    let ids = [];
+    try {
+      ids = JSON.parse(localStorage.getItem(STORAGE_KEYS.viewed) || '[]');
+    } catch (_) {
+      ids = [];
+    }
+    if (!Array.isArray(ids)) ids = [];
+    ids = [currentId, ...ids.filter((id) => Number(id) !== currentId)].slice(0, 8);
+    try {
+      localStorage.setItem(STORAGE_KEYS.viewed, JSON.stringify(ids));
+    } catch (_) {}
+
+    const others = ids.map(Number).filter((id) => id !== currentId && products[id]).slice(0, 4);
+    if (!els.recentlyViewedSection || !els.recentlyViewedGrid) return;
+    if (!others.length) {
+      els.recentlyViewedSection.hidden = true;
+      return;
+    }
+    els.recentlyViewedSection.hidden = false;
+    els.recentlyViewedGrid.innerHTML = others.map((id) => {
+      const item = products[id];
+      const href = getProductUrl(item);
+      return `
+        <article class="product-card" data-product-id="${item.id}" data-product-href="${escapeHtml(href)}">
+          <div class="product-media" role="link" tabindex="0" data-open-page="${item.id}" aria-label="Open ${escapeHtml(item.name)} product page">
+            <img class="upscaled-img" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">
+          </div>
+          <div class="product-info">
+            <div class="product-category"><span>${escapeHtml(item.category)}</span></div>
+            <h3><a class="product-title-link" href="${escapeHtml(href)}">${escapeHtml(item.name)}</a></h3>
+            <div class="product-price-line"><span class="product-price">${escapeHtml(item.price)}</span></div>
+          </div>
+        </article>`;
+    }).join('');
   }
 
   function syncQtyDisplay() {
@@ -783,6 +844,13 @@
 
   function bindEvents() {
     els.themeToggle?.addEventListener('click', toggleTheme);
+    els.pdpZoomClose?.addEventListener('click', closeZoom);
+    els.pdpZoom?.addEventListener('click', (event) => {
+      if (event.target === els.pdpZoom) closeZoom();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeZoom();
+    });
     els.cartToggle?.addEventListener('click', (event) => openDialog(els.cartDialog, event.currentTarget));
     els.checkoutWhatsApp?.addEventListener('click', checkoutOnWhatsApp);
     els.openCheckoutModal?.addEventListener('click', openCheckoutDialog);
