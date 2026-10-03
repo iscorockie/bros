@@ -24,6 +24,24 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" aria-describedby="ageDescription">
+    <div class="age-backdrop"></div>
+    <div class="age-card glass-tile">
+      <div class="age-brand" aria-label="Bros">
+        <span class="brand-mark">b</span><span class="brand-word">bros<span>.</span></span>
+      </div>
+      <span class="eyebrow-pill"><span class="eyebrow-dot"></span> Age-restricted store</span>
+      <h1 id="ageTitle">Welcome to<br><span>Bros.</span></h1>
+      <p id="ageDescription">Our shop is for adults aged 21 and over. Please confirm your age to continue.</p>
+      <div class="age-actions" id="ageActions">
+        <button class="button button-primary" type="button" data-age-confirm>I'm 21 or older <span aria-hidden="true">→</span></button>
+        <button class="button button-muted" type="button" data-age-deny>No, I'm under 21</button>
+      </div>
+      <p class="age-denied" id="ageDenied" tabindex="-1" hidden>Sorry — Bros is only for adults aged 21 and over.</p>
+      <div class="age-legal"><span aria-hidden="true">✦</span> Browse responsibly. Product availability is confirmed at order.</div>
+    </div>
+  </div>
+
   <div class="utility-bar">
     <div class="container utility-inner">
       <a class="utility-promise" href="index.html#delivery">
