@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="brosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd27d"/>
+      <stop offset="38%" stop-color="#ff5e00"/>
+      <stop offset="76%" stop-color="#b81402"/>
+      <stop offset="100%" stop-color="#140200"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#brosGrad)"/>
+  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="38" letter-spacing="-2">b<tspan fill="#ffe29a">.</tspan></text>
+</svg>
