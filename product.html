@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf7f2">
+  <meta name="description" content="Product details, availability, specifications and verified customer reviews at Bros — Uganda's #1 Smoke Shop.">
+  <title>Product Details — Bros Smoke Shop Uganda</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://i0.wp.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem('bros_theme') === 'dark' ? 'dark' : 'light';
+      if (localStorage.getItem('bros_age_verified') === '1') document.documentElement.classList.add('age-verified');
+    } catch (_) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="products.js" defer></script>
+  <script src="product.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="utility-bar">
+    <div class="container utility-inner">
+      <a class="utility-promise" href="index.html#delivery">
+        <span class="utility-spark" aria-hidden="true">✦</span>
+        <span>Complimentary delivery on orders over <strong>UGX 150,000</strong></span>
+        <span class="utility-arrow" aria-hidden="true">↗</span>
+      </a>
+      <div class="utility-links">
+        <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256 780 844 098</span></a>
+        <span class="utility-divider" aria-hidden="true"></span>
+        <a class="utility-action" href="index.html?filter=wishlist" aria-label="Show wishlist"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.2-8.8 10.2S3.2 13.9 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"/></svg></span> Wishlist <b id="utilityWishlistCount" hidden>0</b></a>
+        <button class="utility-action" type="button" data-open-cart><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span> Bag <strong id="utilityCartTotal">UGX 0</strong></button>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Bros home">
+        <span class="brand-mark">b</span>
+        <span class="brand-copy"><span class="brand-word">bros<span>.</span></span><small>GOOD TASTE. GREAT GEAR.</small></span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link is-current" href="index.html#catalogue">All Products</a>
+        <a class="nav-link" href="index.html#featured">Featured</a>
+        <a class="nav-link" href="index.html#why-bros">Why Bros</a>
+        <a class="nav-link" href="index.html#contact">Contact</a>
+      </nav>
+
+      <div class="search-area">
+        <form class="search-form" id="productSearchForm" action="index.html" method="get" role="search">
+          <label class="visually-hidden" for="productSearchInput">Search the Bros catalogue</label>
+          <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg>
+          <input id="productSearchInput" name="q" type="search" placeholder="Search 237 products...">
+        </form>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-action theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.7 8.7 0 1 0 20.2 15.2Z"/></svg>
+        </button>
+        <a class="icon-action wishlist-trigger" href="index.html?filter=wishlist" aria-label="Show wishlist">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.2-8.8 10.2S3.2 13.9 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"/></svg>
+          <span class="action-count" id="wishlistCount" hidden>0</span>
+          <span class="action-label">Saved</span>
+        </a>
+        <button class="bag-trigger" id="cartToggle" type="button" aria-label="Open your bag">
+          <span class="bag-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="bag-count" id="cartCount">0</span></span>
+          <span class="bag-copy"><span>My bag</span><small id="cartTotal">UGX 0</small></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="pdp-main">
+    <div class="pdp-gradient-wash" aria-hidden="true"></div>
+    <div class="container">
+      <!-- Breadcrumbs -->
+      <nav class="pdp-breadcrumbs" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="index.html#catalogue" id="breadcrumbCategory">Catalogue</a>
+        <span aria-hidden="true">/</span>
+        <span id="breadcrumbProduct" aria-current="page">Product</span>
+      </nav>
+
+      <!-- Main Product Detail View -->
+      <section class="pdp-hero" id="pdpHero" aria-live="polite"></section>
+
+      <!-- Specifications & Delivery Info Tabs -->
+      <section class="pdp-details-grid" id="pdpSpecsSection">
+        <div class="pdp-card glass-tile">
+          <span class="eyebrow">Product Specifications</span>
+          <h2>Details &amp; Authenticity</h2>
+          <dl class="pdp-spec-list" id="pdpSpecList"></dl>
+        </div>
+        <div class="pdp-card glass-tile">
+          <span class="eyebrow">Kampala Dispatch</span>
+          <h2>Delivery &amp; Ordering</h2>
+          <ul class="pdp-delivery-points">
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7z"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg>
+              <div><strong>Same-Day Kampala Delivery</strong><span>Orders placed before 5:00 PM are dispatched the same day via express rider.</span></div>
+            </li>
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5.2-3.4 8.5-8 10-4.6-1.5-8-4.8-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg>
+              <div><strong>Complimentary over UGX 150,000</strong><span>Spend UGX 150,000 or more for free delivery anywhere in Kampala.</span></div>
+            </li>
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9.5 9c.6 1.8 2 3.2 3.8 3.8"/></svg>
+              <div><strong>Flexible Payment Options</strong><span>Pay via MTN Mobile Money, Airtel Money, or Cash on Delivery.</span></div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Customer Reviews Section (powered by Backend API) -->
+      <section class="pdp-reviews-section" id="reviewsSection">
+        <div class="pdp-reviews-header">
+          <div>
+            <span class="eyebrow">Customer feedback</span>
+            <h2>Reviews &amp; Ratings</h2>
+          </div>
+          <div class="pdp-rating-badge" id="pdpRatingBadge">
+            <span class="proof-star" aria-hidden="true">★</span>
+            <strong id="pdpAvgRating">4.9</strong>
+            <small id="pdpReviewCount">Verified</small>
+          </div>
+        </div>
+        <div class="pdp-reviews-layout">
+          <div class="pdp-reviews-list" id="pdpReviewsList"></div>
+          <form class="pdp-review-form pdp-card glass-tile" id="pdpReviewForm">
+            <h3>Leave a review</h3>
+            <p>Bought this item from Bros? Share your experience with other shoppers.</p>
+            <div class="form-row">
+              <label for="reviewAuthor">Your Name *</label>
+              <input id="reviewAuthor" type="text" required placeholder="e.g. Brian K.">
+            </div>
+            <div class="form-row">
+              <label for="reviewRating">Rating</label>
+              <select id="reviewRating">
+                <option value="5">★★★★★ (5/5 — Excellent)</option>
+                <option value="4">★★★★☆ (4/5 — Good)</option>
+                <option value="3">★★★☆☆ (3/5 — Average)</option>
+                <option value="2">★★☆☆☆ (2/5 — Below average)</option>
+                <option value="1">★☆☆☆☆ (1/5 — Poor)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="reviewComment">Your Review *</label>
+              <textarea id="reviewComment" rows="3" required placeholder="What did you like about this product?"></textarea>
+            </div>
+            <button class="button button-primary" type="submit">Post Review</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Related Products -->
+      <section class="section-block pdp-related-section">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Similar gear</span>
+            <h2 id="relatedHeading">More in this department</h2>
+          </div>
+          <a class="text-link" id="viewAllCategoryLink" href="index.html#catalogue">Browse all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="products-grid" id="relatedProductsGrid"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div class="footer-brand-column">
+        <a class="brand footer-brand" href="index.html" aria-label="Bros home"><span class="brand-mark">b</span><span class="brand-copy"><span class="brand-word">bros<span>.</span></span><small>GOOD TASTE. GREAT GEAR.</small></span></a>
+        <p>Uganda's #1 premium smoke shop. Discover quality vapes, accessories and everyday essentials, with helpful service from the Bros team.</p>
+        <a class="footer-whatsapp" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9.5 9c.6 1.8 2 3.2 3.8 3.8"/></svg></span> WhatsApp <strong>+256 780 844 098</strong></a>
+      </div>
+      <div class="footer-column"><h2>Shop</h2><a href="index.html?category=Vapes#catalogue">Vapes</a><a href="index.html?category=Accessories#catalogue">Accessories</a><a href="index.html?category=Lighters#catalogue">Lighters</a><a href="index.html?category=Rolling+Papers#catalogue">Rolling essentials</a></div>
+      <div class="footer-column"><h2>About Bros</h2><a href="index.html#why-bros">Why shop with us</a><a href="index.html#delivery">Delivery information</a><a href="index.html#contact">Contact our team</a><a href="index.html">Back to store</a></div>
+      <div class="footer-column"><h2>Need Advice?</h2><p>Our team is available on WhatsApp every day to help you pick the right flavour, strength or setup.</p><a class="button button-gold" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer">Message Bros ↗</a></div>
+    </div>
+    <div class="container footer-meta">
+      <div class="footer-legal"><span>© 2026 Bros Uganda. All rights reserved.</span><span>Adults 21+ only. Please use nicotine products responsibly.</span></div>
+      <div class="footer-payment"><span>Prices in UGX</span><span class="footer-payment-dot">·</span><span>Payment details confirmed when ordering</span></div>
+    </div>
+  </footer>
+
+  <!-- Bag drawer -->
+  <dialog class="cart-dialog" id="cartDialog" aria-labelledby="cartTitle">
+    <div class="drawer-header"><div><span class="eyebrow">Your selection</span><h2 id="cartTitle">Your bag <span id="cartHeadingCount">(0)</span></h2></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close bag">×</button></div>
+    <div class="cart-body" id="cartItems"></div>
+    <div class="cart-empty" id="cartEmpty"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></div><h3>Your bag is waiting.</h3><p>Add a few favourites, then place your order or send to Bros on WhatsApp.</p><a class="button button-outline" href="index.html#catalogue">Explore products</a></div>
+    <div class="cart-footer" id="cartFooter" hidden>
+      <div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">UGX 0</strong></div>
+      <p id="cartDeliveryHint">Delivery and payment details are confirmed by our team before your order is final.</p>
+      <div class="cart-checkout-actions">
+        <button class="button button-primary button-checkout" id="openCheckoutModal" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg>
+          Place Order &amp; Get Order ID
+        </button>
+        <button class="button button-whatsapp button-checkout" id="checkoutWhatsApp" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9.5 9c.6 1.8 2 3.2 3.8 3.8"/></svg>
+          Continue on WhatsApp
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Direct Order Checkout Modal -->
+  <dialog class="checkout-dialog" id="checkoutDialog" aria-labelledby="checkoutTitle">
+    <div class="drawer-header">
+      <div><span class="eyebrow">Kampala Express Dispatch</span><h2 id="checkoutTitle">Complete your order</h2></div>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close checkout">×</button>
+    </div>
+    <div class="checkout-body" id="checkoutBody">
+      <form id="checkoutForm" class="checkout-form">
+        <div class="form-row">
+          <label for="orderCustomerName">Full Name *</label>
+          <input id="orderCustomerName" name="customerName" type="text" required placeholder="e.g. Kato Ivan">
+        </div>
+        <div class="form-row">
+          <label for="orderCustomerPhone">Phone / WhatsApp Number *</label>
+          <input id="orderCustomerPhone" name="customerPhone" type="tel" required placeholder="e.g. +256 772 000 000">
+        </div>
+        <div class="form-row">
+          <label for="orderDeliveryArea">Kampala Area / Delivery Location *</label>
+          <input id="orderDeliveryArea" name="deliveryArea" type="text" required placeholder="e.g. Kololo, Ntinda, Bugolobi, Nakasero">
+        </div>
+        <div class="form-row">
+          <label for="orderPaymentMethod">Preferred Payment Method</label>
+          <select id="orderPaymentMethod" name="paymentMethod">
+            <option value="Mobile Money (MTN / Airtel) on Delivery">Mobile Money (MTN / Airtel) on Delivery</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+            <option value="Store Pickup in Kampala">Store Pickup in Kampala</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="orderDeliveryNotes">Delivery Instructions (Optional)</label>
+          <input id="orderDeliveryNotes" name="deliveryNotes" type="text" placeholder="Gate code, landmark, or preferred time">
+        </div>
+        <div class="checkout-summary" id="checkoutSummaryBox"></div>
+        <div class="checkout-submit-row">
+          <button class="button button-primary" type="submit" id="submitOrderBtn">Confirm Order</button>
+        </div>
+      </form>
+      <div class="order-confirmation" id="orderConfirmationBox" hidden></div>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
