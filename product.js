@@ -160,6 +160,9 @@
     checkoutSummaryBox: document.getElementById('checkoutSummaryBox'),
     orderConfirmationBox: document.getElementById('orderConfirmationBox'),
     toastRegion: document.getElementById('toastRegion'),
+    ageGate: document.getElementById('ageGate'),
+    ageActions: document.getElementById('ageActions'),
+    ageDenied: document.getElementById('ageDenied'),
     recentlyViewedSection: document.getElementById('recentlyViewedSection'),
     recentlyViewedGrid: document.getElementById('recentlyViewedGrid'),
     pdpZoom: document.getElementById('pdpZoom'),
@@ -170,6 +173,7 @@
   init();
 
   function init() {
+    initAgeGate();
     syncThemeControl();
     if (!state.product) {
       if (els.pdpHero) {
@@ -194,6 +198,40 @@
     updateWishlistUI();
     bindEvents();
     fetchProductDetailsFromBackend();
+  }
+
+  function initAgeGate() {
+    if (!els.ageGate) return;
+    let verified = false;
+    try {
+      verified = localStorage.getItem('bros_age_verified') === '1';
+    } catch (_) {}
+
+    if (verified) {
+      els.ageGate.hidden = true;
+      document.documentElement.classList.add('age-verified');
+      return;
+    }
+
+    const confirmButton = els.ageGate.querySelector('[data-age-confirm]');
+    const denyButton = els.ageGate.querySelector('[data-age-deny]');
+    window.setTimeout(() => confirmButton?.focus(), 40);
+
+    confirmButton?.addEventListener('click', () => {
+      try {
+        localStorage.setItem('bros_age_verified', '1');
+      } catch (_) {}
+      document.documentElement.classList.add('age-verified');
+      els.ageGate.hidden = true;
+    });
+
+    denyButton?.addEventListener('click', () => {
+      if (els.ageActions) els.ageActions.hidden = true;
+      if (els.ageDenied) {
+        els.ageDenied.hidden = false;
+        els.ageDenied.focus();
+      }
+    });
   }
 
   function syncThemeControl() {
