@@ -83,6 +83,13 @@ body {
 html:not(.age-verified) body { overflow: hidden; }
 img { display: block; max-width: 100%; }
 svg { display: block; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* Icon sprite: definition block only, never a rendered icon. */
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+/* Brand marks read as solid shapes, so they opt out of the stroke-based line-icon system.
+   The WhatsApp symbol in the sprite carries padding in its viewBox, so its optical size
+   matches the 24px line icons it sits beside in every context. */
+.wa-icon { fill: currentColor; stroke: none; flex: 0 0 auto; }
+
 a { color: inherit; text-decoration: none; }
 button, input, select { font: inherit; }
 button { color: inherit; }
@@ -196,7 +203,7 @@ html.age-verified .age-gate { display: none; }
 .nav-department-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
 .mega-menu { position: absolute; top: calc(100% + 1px); left: 0; z-index: 250; display: grid; width: min(840px, calc(100vw - 56px)); grid-template-columns: 245px 1fr; gap: 25px; padding: 26px; border: 1px solid var(--line); border-radius: 0 0 22px 22px; background: var(--surface); box-shadow: var(--shadow-menu); }
 .mega-copy { padding: 6px 10px 7px 3px; }
-.mega-copy h2 { margin: 0; color: var(--ink-strong); font-size: 1.7rem; font-weight: 800; letter-spacing: -.06em; line-height: 1.05; }
+.mega-copy .mega-title { margin: 0; color: var(--ink-strong); font-size: 1.7rem; font-weight: 800; letter-spacing: -.06em; line-height: 1.05; }
 .mega-copy p { margin: 11px 0 18px; color: var(--muted); font-size: .82rem; }
 .mega-categories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .mega-category { display: flex; align-items: center; gap: 11px; min-width: 0; padding: 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--ink-strong); text-align: left; cursor: pointer; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
@@ -267,11 +274,11 @@ html.age-verified .age-gate { display: none; }
 .hero-actions .button { min-height: 50px; padding-inline: 20px; }
 .button-glass { border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.09); color: #fff; backdrop-filter: blur(9px); }
 .button-glass:hover { border-color: rgba(255,255,255,.76); background: rgba(255,255,255,.15); }
-.hero-benefits { display: flex; flex-wrap: wrap; gap: 16px 22px; margin-top: 25px; color: rgba(242,247,255,.84); font-size: .72rem; font-weight: 550; }
-.hero-benefits span { display: inline-flex; align-items: center; gap: 7px; }
+.hero-benefits { display: flex; flex-wrap: wrap; gap: 16px 22px; margin: 25px 0 0; padding: 0; list-style: none; color: rgba(242,247,255,.84); font-size: .72rem; font-weight: 550; }
+.hero-benefits li { display: inline-flex; align-items: center; gap: 7px; }
 .hero-benefits svg { width: 16px; height: 16px; color: #ffda87; stroke-width: 1.7; }
-.hero-stats { display: flex; gap: clamp(25px, 4vw, 48px); margin-top: 35px; padding-top: 19px; border-top: 1px solid rgba(255,255,255,.19); }
-.hero-stats > div { display: flex; flex-direction: column; gap: 1px; }
+.hero-stats { display: flex; gap: clamp(25px, 4vw, 48px); margin: 35px 0 0; padding: 19px 0 0; list-style: none; border-top: 1px solid rgba(255,255,255,.19); }
+.hero-stats > li { display: flex; flex-direction: column; gap: 1px; }
 .hero-stats strong { color: #fff; font-size: 1.5rem; font-weight: 800; letter-spacing: -.05em; line-height: 1.1; }
 .hero-stats strong span { color: var(--gold); }
 .hero-stats small { color: rgba(233,241,255,.72); font-size: .66rem; font-weight: 550; text-transform: uppercase; letter-spacing: .08em; }
@@ -291,8 +298,8 @@ html.age-verified .age-gate { display: none; }
 .hero-product-card > strong { display: block; overflow: hidden; margin: 5px 0 9px; color: #15243a; font-size: .88rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .hero-product-bottom { padding-top: 9px; border-top: 1px solid #e8edf4; }
 .hero-product-bottom > span { color: #092858; font-size: .9rem; font-weight: 800; }
-.hero-product-bottom a { color: #0763ee; font-size: .7rem; font-weight: 750; }
-.hero-product-bottom a span { margin-left: 4px; }
+.hero-product-bottom a { display: inline-flex; align-items: center; gap: 5px; color: #0763ee; font-size: .7rem; font-weight: 750; }
+.hero-product-bottom .wa-icon { width: 15px; height: 15px; }
 .hero-controls { position: absolute; bottom: -1px; left: 5%; z-index: 3; display: flex; align-items: center; gap: 10px; }
 .hero-arrow { display: grid; width: 35px; height: 35px; place-items: center; border: 1px solid rgba(255,255,255,.36); border-radius: 50%; background: rgba(255,255,255,.08); color: #fff; cursor: pointer; transition: background .2s ease, transform .2s ease; }
 .hero-arrow:hover { transform: translateY(-1px); background: rgba(255,255,255,.19); }
@@ -553,7 +560,7 @@ html.age-verified .age-gate { display: none; }
 .footer-brand { margin-bottom: 16px; }
 .footer-brand-column > p { max-width: 320px; margin: 0 0 15px; color: var(--muted); font-size: .76rem; line-height: 1.68; }
 .footer-whatsapp { display: inline-flex; align-items: center; gap: 7px; color: #168352; font-size: .69rem; font-weight: 700; }
-.footer-whatsapp > span { font-size: .95rem; }
+.footer-whatsapp .wa-icon { width: 16px; height: 16px; }
 .footer-whatsapp strong { color: var(--ink-strong); }
 .footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
 .footer-column h2 { margin: 3px 0 5px; color: var(--ink-strong); font-size: .78rem; font-weight: 800; letter-spacing: .02em; }
@@ -576,7 +583,7 @@ html.age-verified .age-gate { display: none; }
 /* Fixed conversion actions */
 .whatsapp-float { position: fixed; right: 25px; bottom: 24px; z-index: 80; display: inline-flex; min-height: 50px; align-items: center; gap: 8px; padding: 0 17px; border: 1px solid rgba(255,255,255,.32); border-radius: 99px; background: #19a968; color: #fff; font-size: .75rem; font-weight: 750; box-shadow: 0 9px 25px rgba(20,154,93,.28); transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
 .whatsapp-float:hover { transform: translateY(-3px); background: #128d57; box-shadow: 0 13px 30px rgba(20,154,93,.38); }
-.whatsapp-float svg { width: 20px; height: 20px; }
+.whatsapp-float .wa-icon { width: 22px; height: 22px; }
 .scroll-top { position: fixed; right: 32px; bottom: 88px; z-index: 75; display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink-strong); box-shadow: var(--shadow-card); cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease, color .2s ease; }
 .scroll-top.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .scroll-top:hover { color: var(--blue); }
@@ -638,7 +645,7 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
 .cart-subtotal strong { color: var(--blue); font-size: 1rem; font-weight: 800; }
 .cart-footer > p { margin: 8px 0 14px; color: var(--muted); font-size: .67rem; line-height: 1.5; }
 .button-checkout { width: 100%; min-height: 47px; }
-.button-checkout svg { width: 19px; height: 19px; }
+.button-checkout .wa-icon { width: 20px; height: 20px; }
 .compare-dialog { width: min(940px, calc(100vw - 30px)); padding-bottom: 20px; }
 .compare-content { overflow-x: auto; padding: 16px 22px 22px; }
 .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .75rem; }
@@ -649,6 +656,7 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
 .compare-table .compare-product-title { display: block; max-width: 170px; margin: auto; color: var(--ink-strong); font-weight: 750; line-height: 1.35; text-align: center; }
 .compare-table .compare-price { color: var(--blue); font-weight: 800; white-space: nowrap; }
 .compare-table td .button { min-height: 34px; padding-inline: 10px; font-size: .66rem; }
+.compare-table .wa-icon { width: 15px; height: 15px; }
 
 /* Tablet, mobile and motion preferences */
 @media (min-width: 1200px) {
@@ -922,7 +930,8 @@ dialog::backdrop { background: rgba(5, 15, 31, .62); backdrop-filter: blur(7px);
   .footer-meta { min-height: 74px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; padding: 12px 0; font-size: .57rem; }
   .footer-legal, .footer-payment { gap: 8px; }
   .footer-legal span + span { padding-left: 8px; }
-  .whatsapp-float, .scroll-top { display: none; }
+  /* Collapse the whole launcher region on small screens so it is not an empty landmark. */
+  .page-launchers { display: none; }
   .mobile-dock { position: fixed; right: 0; bottom: 0; left: 0; z-index: 120; display: grid; height: calc(61px + env(safe-area-inset-bottom)); grid-template-columns: repeat(3, 1fr); padding: 5px 10px calc(5px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 94%, transparent); box-shadow: 0 -8px 25px rgba(18,41,75,.08); backdrop-filter: blur(16px); }
   .mobile-dock > a, .mobile-dock > button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 0; background: transparent; color: var(--muted-strong); font-size: .56rem; font-weight: 650; cursor: pointer; }
   .mobile-dock svg { width: 19px; height: 19px; }

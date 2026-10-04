@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
@@ -39,12 +39,21 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <!-- Shared brand marks, referenced by <use> from both this page and app.js so the
+       WhatsApp glyph cannot drift from component to component. Outline path data for the
+       WhatsApp mark is CC0-1.0 via Simple Icons; it is used here only to point at the
+       store's WhatsApp line, per Meta's brand guidelines. -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-whatsapp" viewBox="-4.4 -4.4 32.8 32.8">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </symbol>
+  </svg>
 
   <!-- Age verification stays on-device; a verified adult will not see it again. -->
   <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" aria-describedby="ageDescription">
     <div class="age-backdrop"></div>
     <div class="age-card">
-      <div class="age-brand" aria-label="Bros">
+      <div class="age-brand" role="img" aria-label="Bros">
         <span class="brand-mark">b</span><span class="brand-word">bros<span>.</span></span>
       </div>
       <span class="eyebrow-pill"><span class="eyebrow-dot"></span> Age-restricted store</span>
@@ -66,8 +75,8 @@
         <span>Complimentary delivery on orders over <strong>UGX 150,000</strong></span>
         <span class="utility-arrow" aria-hidden="true">↗</span>
       </a>
-      <div class="utility-links">
-        <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256 780 844 098</span></a>
+      <nav class="utility-links" aria-label="Store contact and language">
+        <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256&nbsp;780&nbsp;844&nbsp;098</span></a>
         <span class="utility-divider" aria-hidden="true"></span>
         <div class="language-wrap">
           <button class="language-button" id="languageToggle" type="button" aria-expanded="false" aria-controls="languageMenu"><span class="language-code">EN</span><span>Language</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg></button>
@@ -78,7 +87,7 @@
         </div>
         <button class="utility-action" id="wishlistUtility" type="button" aria-label="Show wishlist"><span aria-hidden="true">♡</span> Wishlist <b id="utilityWishlistCount" hidden>0</b></button>
         <button class="utility-action" type="button" data-open-cart><span aria-hidden="true">▱</span> Bag <strong id="utilityCartTotal">UGX 0</strong></button>
-      </div>
+      </nav>
     </div>
   </div>
 
@@ -96,11 +105,11 @@
           <div class="mega-menu" id="departmentMenu" hidden>
             <div class="mega-copy">
               <span class="eyebrow">The Bros edit</span>
-              <h2>Find your<br>kind of gear.</h2>
+              <p class="mega-title">Find your<br>kind of gear.</p>
               <p>Browse by department or talk to our team for a personal recommendation.</p>
               <a class="text-link" href="#catalogue" data-close-mega>Explore all products <span aria-hidden="true">→</span></a>
             </div>
-            <div class="mega-categories" id="megaCategories" aria-label="Product departments"></div>
+            <div class="mega-categories" id="megaCategories" role="group" aria-label="Product departments"></div>
           </div>
         </div>
         <a class="nav-link" href="#featured">Featured</a>
@@ -112,8 +121,9 @@
         <form class="search-form" id="searchForm" role="search" autocomplete="off">
           <label class="visually-hidden" for="searchInput">Search the Bros catalogue</label>
           <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg>
-          <input id="searchInput" type="search" placeholder="Search 237 products..." aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false">
+          <input id="searchInput" type="search" placeholder="Search 237 products..." role="combobox" aria-haspopup="listbox" aria-autocomplete="list" aria-controls="searchSuggestions" aria-expanded="false">
           <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" hidden>×</button>
+          <button class="search-submit visually-hidden" type="submit">Search the Bros catalogue</button>
           <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions" hidden></div>
         </form>
       </div>
@@ -160,18 +170,18 @@
             <a class="button button-gold" href="#catalogue">Browse 237 products <span aria-hidden="true">↗</span></a>
             <a class="button button-glass" href="#featured">Explore featured picks</a>
           </div>
-          <div class="hero-benefits" aria-label="Shopping benefits">
-            <span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z"/><circle cx="7.5" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg>Same-day Kampala delivery*</span>
-            <span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5.2-3.4 8.5-8 10-4.6-1.5-8-4.8-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg>Authenticity you can trust</span>
-          </div>
-          <div class="hero-stats" aria-label="Bros store highlights">
-            <div><strong>237<span>+</span></strong><small>products</small></div>
-            <div><strong>15K<span>+</span></strong><small>happy customers</small></div>
-            <div><strong>4.9<span>★</span></strong><small>store rating</small></div>
-          </div>
+          <ul class="hero-benefits" aria-label="Shopping benefits">
+            <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z"/><circle cx="7.5" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg>Same-day Kampala delivery*</li>
+            <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5.2-3.4 8.5-8 10-4.6-1.5-8-4.8-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg>Authenticity you can trust</li>
+          </ul>
+          <ul class="hero-stats" aria-label="Bros store highlights">
+            <li><strong>237<span>+</span></strong><small>products</small></li>
+            <li><strong>15K<span>+</span></strong><small>happy customers</small></li>
+            <li><strong>4.9<span>★</span></strong><small>store rating</small></li>
+          </ul>
         </div>
 
-        <div class="hero-showcase" aria-label="Featured product spotlight">
+        <div class="hero-showcase" role="group" aria-label="Featured product spotlight">
           <div class="showcase-orbit showcase-orbit-one" aria-hidden="true"></div>
           <div class="showcase-orbit showcase-orbit-two" aria-hidden="true"></div>
           <div class="showcase-label"><span class="showcase-label-dot"></span> In the spotlight</div>
@@ -181,7 +191,7 @@
           <div class="hero-product-card">
             <div class="hero-product-top"><span class="hero-product-category" id="heroProductCategory">Vapes</span><span class="hero-slide-counter" id="heroSlideCounter">01 / 03</span></div>
             <strong id="heroProductName">Tugboat E-Juice 30ml (50mg)</strong>
-            <div class="hero-product-bottom"><span id="heroProductPrice">UGX 110,000</span><a id="heroWhatsApp" href="https://wa.me/256780844098?text=Hi%20Bros%2C%20I%27m%20interested%20in%20Tugboat%20E-Juice%2030ml%20%2850mg%29." target="_blank" rel="noopener noreferrer" aria-label="Ask Bros about Tugboat E-Juice on WhatsApp">Ask us <span aria-hidden="true">↗</span></a></div>
+            <div class="hero-product-bottom"><span id="heroProductPrice">UGX 110,000</span><a id="heroWhatsApp" href="https://wa.me/256780844098?text=Hi%20Bros%2C%20I%27m%20interested%20in%20Tugboat%20E-Juice%2030ml%20%2850mg%29." target="_blank" rel="noopener noreferrer" aria-label="Ask Bros about Tugboat E-Juice on WhatsApp"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>Ask us<span aria-hidden="true">↗</span></a></div>
           </div>
           <div class="hero-controls">
             <button class="hero-arrow" id="heroPrevious" type="button" aria-label="Previous featured product"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
@@ -205,17 +215,17 @@
       <div class="container promo-grid">
         <a class="promo-card promo-card-blue" href="#delivery" data-promo="delivery">
           <div class="promo-copy"><span class="promo-kicker">A little extra</span><h3>Good gear.<br>Good delivery.</h3><p>Free delivery on orders over UGX 150,000.</p><span class="promo-link">See delivery details <span aria-hidden="true">↗</span></span></div>
-          <div class="promo-image-wrap"><img id="promoImageDelivery" alt="Featured Bros product" loading="lazy" decoding="async"></div>
+          <div class="promo-image-wrap"><img id="promoImageDelivery" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Featured Bros product" loading="lazy" decoding="async"></div>
           <span class="promo-orb" aria-hidden="true"></span>
         </a>
         <a class="promo-card promo-card-amber" href="#catalogue" data-quick-filter="new">
           <div class="promo-copy"><span class="promo-kicker">Just landed</span><h3>Meet your<br>new favourite.</h3><p>Take a look at the latest additions to the catalogue.</p><span class="promo-link">Explore new arrivals <span aria-hidden="true">↗</span></span></div>
-          <div class="promo-image-wrap"><img id="promoImageNew" alt="A product from the Bros catalogue" loading="lazy" decoding="async"></div>
+          <div class="promo-image-wrap"><img id="promoImageNew" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="A product from the Bros catalogue" loading="lazy" decoding="async"></div>
           <span class="promo-orb" aria-hidden="true"></span>
         </a>
         <a class="promo-card promo-card-lilac" href="#catalogue" data-category="Accessories">
           <div class="promo-copy"><span class="promo-kicker">The finishing touches</span><h3>Make it<br>your own.</h3><p>Explore the details that make every setup feel personal.</p><span class="promo-link">Shop accessories <span aria-hidden="true">↗</span></span></div>
-          <div class="promo-image-wrap"><img id="promoImageAccessories" alt="A Bros accessory" loading="lazy" decoding="async"></div>
+          <div class="promo-image-wrap"><img id="promoImageAccessories" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="A Bros accessory" loading="lazy" decoding="async"></div>
           <span class="promo-orb" aria-hidden="true"></span>
         </a>
       </div>
@@ -228,20 +238,20 @@
           <a class="text-link" href="#catalogue">Browse all products <span aria-hidden="true">→</span></a>
         </div>
         <div class="featured-note"><span class="featured-note-icon" aria-hidden="true">✦</span><span><strong>Thoughtfully picked.</strong> No surprise pricing — the price you see is the current listed price.</span><a href="https://wa.me/256780844098?text=Hi%20Bros%2C%20what%20offers%20are%20available%20today%3F" target="_blank" rel="noopener noreferrer">Ask about current offers <span aria-hidden="true">↗</span></a></div>
-        <div class="product-rail" id="featuredProducts" aria-label="Featured products"></div>
+        <div class="product-rail" id="featuredProducts" role="group" aria-label="Featured products"></div>
       </div>
     </section>
 
     <section class="story-section" aria-label="Shop the Bros collection">
       <div class="container story-grid">
         <a class="story-card story-card-dark" href="#catalogue" data-quick-filter="under-100">
-          <span class="story-label">Good finds, good value</span><div class="story-content"><div><h3>Little luxuries,<br>from <span id="startingPrice">UGX 22,000</span>.</h3><p>Explore well-made essentials at a range of price points.</p><span class="story-link">Shop the collection <span aria-hidden="true">→</span></span></div><img id="storyImageValue" alt="A Bros product currently in the catalogue" loading="lazy" decoding="async"></div>
+          <span class="story-label">Good finds, good value</span><div class="story-content"><div><h3>Little luxuries,<br>from <span id="startingPrice">UGX 22,000</span>.</h3><p>Explore well-made essentials at a range of price points.</p><span class="story-link">Shop the collection <span aria-hidden="true">→</span></span></div><img id="storyImageValue" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="A Bros product currently in the catalogue" loading="lazy" decoding="async"></div>
         </a>
         <a class="story-card story-card-sky" href="#catalogue" data-category="Lighters">
-          <span class="story-label">Small details. Big character.</span><div class="story-content"><div><h3>A brighter<br>kind of <span>spark.</span></h3><p>Browse lighters with a little more personality.</p><span class="story-link">Explore lighters <span aria-hidden="true">→</span></span></div><img id="storyImageLighter" alt="A lighter from the Bros catalogue" loading="lazy" decoding="async"></div>
+          <span class="story-label">Small details. Big character.</span><div class="story-content"><div><h3>A brighter<br>kind of <span>spark.</span></h3><p>Browse lighters with a little more personality.</p><span class="story-link">Explore lighters <span aria-hidden="true">→</span></span></div><img id="storyImageLighter" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="A lighter from the Bros catalogue" loading="lazy" decoding="async"></div>
         </a>
         <a class="story-card story-card-gold" href="#catalogue" data-category="Rolling Papers">
-          <span class="story-label">Made for your setup</span><div class="story-content"><div><h3>Everyday gear.<br>Better <span>details.</span></h3><p>Explore rolling essentials and accessories.</p><span class="story-link">See the essentials <span aria-hidden="true">→</span></span></div><img id="storyImageEssentials" alt="A rolling essential from the Bros catalogue" loading="lazy" decoding="async"></div>
+          <span class="story-label">Made for your setup</span><div class="story-content"><div><h3>Everyday gear.<br>Better <span>details.</span></h3><p>Explore rolling essentials and accessories.</p><span class="story-link">See the essentials <span aria-hidden="true">→</span></span></div><img id="storyImageEssentials" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="A rolling essential from the Bros catalogue" loading="lazy" decoding="async"></div>
         </a>
       </div>
     </section>
@@ -301,7 +311,7 @@
         <div class="benefit-grid">
           <article class="benefit-card"><span class="benefit-icon benefit-icon-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z"/><circle cx="7.5" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg></span><h3>Delivery that works</h3><p>Same-day delivery in Kampala for orders placed before 5 PM. Free delivery on orders over UGX 150,000.</p></article>
           <article class="benefit-card"><span class="benefit-icon benefit-icon-gold" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5.2-3.4 8.5-8 10-4.6-1.5-8-4.8-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg></span><h3>Quality you can trust</h3><p>We stand behind the authenticity of the products we stock. Need help choosing? Just ask.</p></article>
-          <article class="benefit-card"><span class="benefit-icon benefit-icon-green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg></span><h3>Real people on WhatsApp</h3><p>Ask about product details, stock, delivery or payment before you place an order.</p></article>
+          <article class="benefit-card"><span class="benefit-icon benefit-icon-green" aria-hidden="true"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg></span><h3>Real people on WhatsApp</h3><p>Ask about product details, stock, delivery or payment before you place an order.</p></article>
         </div>
       </div>
     </section>
@@ -316,7 +326,7 @@
 
     <section class="contact-section" id="contact">
       <div class="container contact-card">
-        <div class="contact-copy"><span class="eyebrow eyebrow-light">Here to help</span><h2>Not sure what<br>you're looking for?</h2><p>Tell us what you have in mind. Our team can help you find a product, check availability and arrange delivery.</p><div class="contact-actions"><a class="button button-gold" href="https://wa.me/256780844098?text=Hi%20Bros!%20Can%20you%20help%20me%20choose%3F" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg>Chat on WhatsApp</a><a class="contact-phone" href="tel:+256780844098">Call +256 780 844 098</a></div></div>
+        <div class="contact-copy"><span class="eyebrow eyebrow-light">Here to help</span><h2>Not sure what<br>you're looking for?</h2><p>Tell us what you have in mind. Our team can help you find a product, check availability and arrange delivery.</p><div class="contact-actions"><a class="button button-gold" href="https://wa.me/256780844098?text=Hi%20Bros!%20Can%20you%20help%20me%20choose%3F" target="_blank" rel="noopener noreferrer"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>Chat on WhatsApp</a><a class="contact-phone" href="tel:+256780844098">Call&nbsp;+256&nbsp;780&nbsp;844&nbsp;098</a></div></div>
         <div class="contact-art" aria-hidden="true"><div class="contact-disc"></div><div class="contact-wordmark">bros<span>.</span></div><div class="contact-caption">QUALITY GEAR<br>REAL PEOPLE</div><div class="contact-spark contact-spark-one">✦</div><div class="contact-spark contact-spark-two">✧</div></div>
       </div>
     </section>
@@ -327,7 +337,7 @@
       <div class="footer-brand-column">
         <a class="brand footer-brand" href="#home" aria-label="Bros home"><span class="brand-mark">b</span><span class="brand-copy"><span class="brand-word">bros<span>.</span></span><small>GOOD TASTE. GREAT GEAR.</small></span></a>
         <p>Uganda's #1 premium smoke shop. Discover quality vapes, accessories and everyday essentials, with helpful service from the Bros team.</p>
-        <a class="footer-whatsapp" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◉</span> WhatsApp <strong>+256 780 844 098</strong></a>
+        <a class="footer-whatsapp" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>WhatsApp <strong>+256&nbsp;780&nbsp;844&nbsp;098</strong></a>
       </div>
       <div class="footer-column"><h2>Shop</h2><a href="#catalogue" data-category="Vapes">Vapes</a><a href="#catalogue" data-category="Accessories">Accessories</a><a href="#catalogue" data-category="Lighters">Lighters</a><a href="#catalogue" data-category="Rolling Papers">Rolling essentials</a></div>
       <div class="footer-column"><h2>About Bros</h2><a href="#why-bros">Why shop with us</a><a href="#delivery">Delivery information</a><a href="#contact">Contact our team</a><a href="#home">Back to top</a></div>
@@ -339,13 +349,15 @@
     </div>
   </footer>
 
-  <a class="whatsapp-float" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer" aria-label="Chat with Bros on WhatsApp"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg><span>Chat with us</span></a>
-  <button class="scroll-top" id="scrollTop" type="button" aria-label="Scroll to top"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 14 6-6 6 6"/></svg></button>
+  <section class="page-launchers" aria-label="Chat with Bros and page navigation">
+    <a class="whatsapp-float" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer" aria-label="Chat with Bros on WhatsApp"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg><span>Chat with us</span></a>
+    <button class="scroll-top" id="scrollTop" type="button" aria-label="Scroll to top"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 14 6-6 6 6"/></svg></button>
+  </section>
 
   <!-- Mobile conversion dock: search, direct WhatsApp and cart. -->
   <nav class="mobile-dock" aria-label="Quick actions">
     <button type="button" data-focus-search><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg><span>Search</span></button>
-    <a href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg><span>WhatsApp</span></a>
+    <a href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg><span>WhatsApp</span></a>
     <button type="button" data-open-cart><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span>Bag <b id="mobileCartCount">0</b></span></button>
   </nav>
 
@@ -353,6 +365,7 @@
 
   <!-- Product detail / quick view dialog. -->
   <dialog class="product-dialog" id="quickView" aria-labelledby="quickTitle">
+    <p id="quickTitle" class="visually-hidden">Product details</p>
     <button class="dialog-close" type="button" data-close-dialog aria-label="Close product details">×</button>
     <div class="quick-view-content" id="quickViewContent"></div>
   </dialog>
@@ -362,7 +375,7 @@
     <div class="drawer-header"><div><span class="eyebrow">Your selection</span><h2 id="cartTitle">Your bag <span id="cartHeadingCount">(0)</span></h2></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close bag">×</button></div>
     <div class="cart-body" id="cartItems"></div>
     <div class="cart-empty" id="cartEmpty"><div class="empty-icon" aria-hidden="true">＋</div><h3>Your bag is waiting.</h3><p>Add a few favourites, then send your order to Bros on WhatsApp.</p><button class="button button-outline" type="button" data-close-cart>Explore products</button></div>
-    <div class="cart-footer" id="cartFooter" hidden><div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">UGX 0</strong></div><p>Delivery and payment details are confirmed by our team before your order is final.</p><button class="button button-whatsapp button-checkout" id="checkoutWhatsApp" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg>Continue on WhatsApp</button></div>
+    <div class="cart-footer" id="cartFooter" hidden><div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">UGX 0</strong></div><p>Delivery and payment details are confirmed by our team before your order is final.</p><button class="button button-whatsapp button-checkout" id="checkoutWhatsApp" type="button"><svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>Continue on WhatsApp</button></div>
   </dialog>
 
   <!-- Product comparison dialog. -->
