@@ -1,59 +1,74 @@
-# Bros storefront
+# Bros storefront & backend
 
-A responsive, static Bros storefront built with vanilla HTML, CSS and JavaScript for GitHub Pages. There is no build step or runtime dependency.
+The homepage is the rebuilt, responsive Bros storefront for GitHub Pages, with a Python/SQLite service retained for local or separately hosted backend workflows. Product names, UGX prices, image URLs, and availability remain in the shared 237-item catalogue.
 
 ## Run locally
 
-From this directory, start any static file server, for example:
+For the full Python server and API:
+
+```sh
+python3 server.py
+```
+
+Open `http://localhost:8080`. The server binds to `0.0.0.0` by default and serves the static files, `product.html`, `/api/*`, `/favicon.ico`, and `/upscaled/inputs/...`.
+
+For a static-only preview instead:
 
 ```sh
 python3 -m http.server 8080
 ```
 
-Open `http://localhost:8080`.
+The static server does not provide `/api/*` routes.
 
-## Files
+## Storefront files
 
-- `index.html` — page structure, metadata, age gate, navigation, sections and dialogs.
-- `styles.css` — responsive light/dark design system and component styles.
-- `app.js` — theme persistence, age verification, catalogue filters/search, wishlist, comparison, quick view, local bag and WhatsApp actions.
-- `products.js` — the existing 237-item product array. Product names, UGX prices, image URLs and availability values are preserved from the previous site; product photos are not edited or replaced.
+- `index.html` + `app.js` — rebuilt landing page with catalogue search, category/price filters, sorting, availability, wishlist, comparison, quick view, local bag, and WhatsApp-first ordering.
+- `styles.css` — the rebuilt responsive light/dark design system.
+- `products.js` — the unchanged catalogue of 237 products and existing image URLs.
+- `product.html` + `product.js` + `product.css` — the retained detail/review page and its backend-aware interactions; `product.css` isolates the detail-page styles from the rebuilt homepage stylesheet.
+- `favicon.svg` — site icon. `CNAME` configures the `bros.chikwafu.com` custom domain for GitHub Pages.
 
-## Icons
+The rebuilt homepage intentionally uses browser storage and WhatsApp for its bag/order handoff; its `app.js` does not call the retained API. The retained detail page still uses API endpoints when served by `server.py`. The homepage currently opens products in its quick-view dialog rather than linking to `product.html`.
 
-Interface icons are inline 24px stroke SVGs that inherit the global `svg` rule in `styles.css`.
-Brand marks are the exception: they are solid glyphs and opt out of the stroke system through
-`.wa-icon` (`fill: currentColor`, no stroke). The WhatsApp mark is declared once as a sprite at
-the top of `index.html` (`<symbol id="icon-whatsapp">`) and every CTA — static markup and the
-templates in `app.js` (`WA_ICON`) alike — references it with `<use href="#icon-whatsapp">`. The
-symbol's `viewBox` carries 4.4 units of padding, so the mark keeps the same optical size as the
-line icons it sits beside at every size (13px chips to 22px floating pill) without per-component
-tuning. Add new WhatsApp touchpoints by reusing the sprite instead of drawing another bubble,
-otherwise the mark drifts one component at a time.
+GitHub Pages serves static assets only, so it does not run `server.py` or provide the API. Backend-dependent detail-page actions need a separately hosted API when the site is deployed there.
 
-## Store behaviour
+## Backend (`server.py`)
 
-- Orders are handed off to WhatsApp at `+256 780 844 098`; the site does not collect payment details.
-- Search, category and price filters, sorting, availability, wishlist, comparison, quick view and bag contents work in the browser. Theme, age verification, wishlist and bag preferences are stored locally.
-- The top 12 products in the existing catalogue are used for the “New arrivals” view; the featured set is curated by product index in `app.js`.
-- Product-specific star ratings, old prices, sales counts and stock quantities are not in the source catalogue. The storefront therefore does not invent those values or show a fabricated discount timer/progress bar. Add a real promotion/inventory feed before enabling sale badges, countdowns or sold-progress indicators.
-- Conversion hooks emit `bros:metric` browser events (`add_to_cart`, `whatsapp_click`, `search`, `product_quick_view`, and others). An existing analytics tool can listen for those events or use the optional `dataLayer` integration in `app.js`.
+SQLite-backed endpoints include session carts and wishlists, orders, product data and reviews, newsletter subscriptions, inquiries, metrics, and image-upscale status:
+
+- `GET /api/health`
+- `GET /api/products` and `GET /api/products/<id>`
+- `POST /api/products/<id>/reviews`
+- `GET` / `POST /api/cart?session_id=`
+- `GET` / `POST /api/wishlist?session_id=`
+- `GET` / `POST /api/orders` and `GET /api/orders/<orderRef>`
+- `POST /api/inquiries`
+- `POST /api/newsletter`
+- `GET /api/upscale/status`
+
+The server stores its SQLite database under the ignored `.cache/` directory. Do not expose the local development server as a production API without reviewing its deployment and security requirements.
+
+## Images
+
+Catalogue photos continue to load from their existing image host; the store does not edit or replace them. `scripts/upscale_images.py` writes `data/upscale_manifest.json` without rewriting catalogue URLs. The optional Real-ESRGAN workflow and its outputs are not required to run the storefront.
+
+## Icons and storefront behavior
+
+Interface icons are inline 24px stroke SVGs that inherit the global `svg` rule in `styles.css`. Brand marks are the exception: they are solid glyphs and opt out of the stroke system through `.wa-icon` (`fill: currentColor`, no stroke). The WhatsApp mark is declared once as a sprite at the top of `index.html` (`<symbol id="icon-whatsapp">`) and the static CTAs and `app.js` templates reference it with `<use href="#icon-whatsapp">`.
+
+Orders on the rebuilt homepage are handed off to WhatsApp at `+256 780 844 098`; the page does not collect payment details. Search, filters, wishlist, comparison, quick view, and bag contents work in the browser. Theme, age verification, wishlist, and bag preferences are stored locally.
+
+The catalogue does not contain product-specific ratings, old prices, sales counts, or stock quantities. The storefront therefore avoids fabricated discounts, timers, reviews, and sold-progress indicators. Conversion hooks emit `bros:metric` browser events (including `add_to_cart`, `whatsapp_click`, `search`, and `product_quick_view`) for optional analytics integrations.
 
 ## Markup notes
 
-`index.html` is clean under `html-validate` except two deliberate exceptions, so they are not
-"fixed" again by accident:
+`index.html` was validated with `html-validate` and axe-core on the rebuilt storefront. Two deliberate exceptions are documented here so they are not "fixed" again by accident:
 
-- The search typeahead popup keeps `role="listbox"` instead of a native `<select>`: 237 products
-  with photos need filtering as you type. The input is a spec-complete combobox
-  (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, `aria-activedescendant`).
-- `require-sri` on the four `<link>`/`<script>` tags: `products.js` and `app.js` are first-party
-  files that change with every catalogue edit (an integrity hash would rot), and Google Fonts
-  does not publish stable hashes for its stylesheet.
+- The search typeahead keeps a filterable `role="listbox"` rather than a native `<select>` because it searches 237 products as the user types. The input uses the combobox pattern (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, and `aria-activedescendant`).
+- SRI is not specified for first-party scripts that change with the catalogue and the Google Fonts stylesheet, which does not publish a stable hash.
 
-The age gate owns the page `<h1>` because it is `display: none` once verified, leaving the hero
-`<h1>` as the only heading at that level in the accessibility tree.
+The age gate owns the page `<h1>` because it is hidden once verified, leaving the hero `<h1>` as the only heading at that level in the accessibility tree. This merge replaces the previous homepage with the rebuilt page; it does not separately patch each of the findings reported against the old `main` homepage. Revalidate the merged pages, including `product.html`, before release.
 
 ## Before launch
 
-Confirm the age requirement, delivery threshold, delivery coverage, phone number, store claims and current catalogue availability with the business. The product image URLs continue to load from the existing image host, so those images still require the host to remain available.
+Confirm the age requirement, delivery threshold and coverage, phone number, store claims, and current catalogue availability with the business. Keep the product image host available. GitHub Pages must remain configured for the `CNAME` domain, and `server.py` must be deployed separately if API-backed functionality is required.
