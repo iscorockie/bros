@@ -24,12 +24,13 @@ These add-only paths merge without conflict and must remain in the result: `.git
 
 The selected homepage `app.js` is intentionally the rebuild's localStorage/WhatsApp implementation and does **not** call the main branch's `/api/*` endpoints. `server.py` and the API are preserved, and the retained `product.js` still uses them when that detail page is served by the Python server, but the rebuilt homepage currently opens its quick-view dialog rather than linking to `product.html`. Connecting the homepage cart/order flow to the API or adding a full-detail link is a separate follow-up, not a hidden part of this merge.
 
-`CNAME` and the custom-domain metadata are kept for GitHub Pages. GitHub Pages is static hosting; it will not run `server.py`, so API-backed behavior still requires a separately hosted service. The 27 validator findings previously reported on main's old homepage are not being patched one-by-one here; the homepage is replaced with the rebuilt page, and the merged pages (especially `product.html`) should be revalidated before release.
+`CNAME` and the custom-domain metadata are kept for GitHub Pages. GitHub Pages is static hosting; it will not run `server.py`, so API-backed behavior still requires a separately hosted service. The old main homepage was replaced rather than patched line-by-line. The inherited product-page validator errors (DOCTYPE casing, generic-element name, telephone spacing, missing form submit control, and missing image `src`) were fixed in this follow-up; both served HTML documents now pass the recommended validator preset. The only remaining validator suppression is the scoped `prefer-native-element` exception on the custom searchable listbox.
 
 ## Verification recorded for this merge
 
 1. `node --check app.js`, `node --check products.js`, and `node --check product.js` pass; the catalogue still has 237 records.
 2. `python3 -m py_compile server.py scripts/upscale_images.py` passes.
-3. The rebuilt homepage has unique static IDs, no `<img>` without `src`, and no form without a submit control; all merge-conflict markers are removed.
-4. A live `server.py` smoke test returned HTTP 200 for `/`, `/product.html`, `/product.css`, and `/api/products`; `/api/health` reported 237 products.
-5. The inherited `product.html` still has at least the pre-existing no-`src` `#pdpZoomImage` and no-submit `#productSearchForm` findings. They are deliberately not fixed in this storefront merge; audit/fix the main-side validator findings in a separate review before release.
+3. Both served pages have unique static IDs, no missing ARIA references, no `<img>` without `src`, and no form without a submit control; all merge-conflict markers are removed.
+4. `html-validate` 11.16.2 (recommended preset) passes on `index.html`, `product.html`, and the whole repository with zero errors. The rebuild's filterable listbox has a one-element, reasoned `prefer-native-element` suppression.
+5. An axe-core/jsdom check returns zero WCAG 2.1 A/AA violations on both pages in light and dark themes after confirming age; jsdom lacks canvas, so color-contrast coverage may be incomplete.
+6. A live `server.py` smoke test returned HTTP 200 for `/`, `/product.html`, `/product.css`, and `/api/products`; `/api/health` reported 237 products.

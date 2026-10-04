@@ -62,12 +62,15 @@ The catalogue does not contain product-specific ratings, old prices, sales count
 
 ## Markup notes
 
-`index.html` was validated with `html-validate` and axe-core on the rebuilt storefront. Two deliberate exceptions are documented here so they are not "fixed" again by accident:
+`index.html` and `product.html` pass `html-validate` 11.16.2's recommended preset with zero errors. An axe-core/jsdom check returned zero WCAG 2.1 A/AA violations on both pages in light and dark themes; jsdom does not implement canvas, so automated color-contrast evaluation may be incomplete.
 
-- The search typeahead keeps a filterable `role="listbox"` rather than a native `<select>` because it searches 237 products as the user types. The input uses the combobox pattern (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, and `aria-activedescendant`).
+Two deliberate exceptions are documented here so they are not "fixed" again by accident:
+
+- The search typeahead keeps a filterable `role="listbox"` rather than a native `<select>` because it searches 237 products as the user types. The input uses the combobox pattern (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, and `aria-activedescendant`). A scoped `html-validate-disable-next prefer-native-element` comment is attached only to this custom suggestion list.
 - SRI is not specified for first-party scripts that change with the catalogue and the Google Fonts stylesheet, which does not publish a stable hash.
 
-The age gate owns the page `<h1>` because it is hidden once verified, leaving the hero `<h1>` as the only heading at that level in the accessibility tree. This merge replaces the previous homepage with the rebuilt page; it does not separately patch each of the findings reported against the old `main` homepage. Revalidate the merged pages, including `product.html`, before release.
+The age gate owns the page `<h1>` because it is hidden once verified, leaving the hero `<h1>` as the only heading at that level in the accessibility tree. The previous `main` homepage is replaced by the rebuilt, validated page; related markup findings on the retained product page were fixed in this follow-up.
+
 
 ## Before launch
 

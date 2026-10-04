@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
@@ -28,7 +28,7 @@
   <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" aria-describedby="ageDescription">
     <div class="age-backdrop"></div>
     <div class="age-card glass-tile">
-      <div class="age-brand" aria-label="Bros">
+      <div class="age-brand" role="img" aria-label="Bros">
         <span class="brand-mark">b</span><span class="brand-word">bros<span>.</span></span>
       </div>
       <span class="eyebrow-pill"><span class="eyebrow-dot"></span> Age-restricted store</span>
@@ -51,7 +51,7 @@
         <span class="utility-arrow" aria-hidden="true">↗</span>
       </a>
       <div class="utility-links">
-        <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256 780 844 098</span></a>
+        <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256&nbsp;780&nbsp;844&nbsp;098</span></a>
       </div>
     </div>
   </div>
@@ -76,6 +76,7 @@
           <label class="visually-hidden" for="productSearchInput">Search the Bros catalogue</label>
           <svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg>
           <input id="productSearchInput" name="q" type="search" placeholder="Search 237 products...">
+          <button class="visually-hidden" type="submit">Search the Bros catalogue</button>
         </form>
       </div>
 
@@ -206,7 +207,7 @@
 
   <div class="pdp-zoom" id="pdpZoom" hidden>
     <button class="dialog-close" type="button" id="pdpZoomClose" aria-label="Close zoom"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-    <img id="pdpZoomImage" class="upscaled-img" alt="">
+    <img id="pdpZoomImage" class="upscaled-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
   </div>
 
   <footer class="site-footer">
