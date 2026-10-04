@@ -57,7 +57,7 @@
   border: 1px solid rgba(8, 102, 245, .2);
   border-radius: 99px;
   background: var(--blue-soft);
-  color: var(--blue);
+  color: var(--blue-deep);
   font-size: .64rem;
   font-weight: 800;
   letter-spacing: .04em;
@@ -216,9 +216,14 @@
 }
 .pdp-buy-now { grid-column: 1 / -1; min-height: 46px; }
 .pdp-wishlist-btn.is-active {
-  border-color: #db6270;
-  color: #db6270;
-  background: rgba(219, 98, 112, .08);
+  border-color: #a43848;
+  color: #a43848;
+  background: rgba(164, 56, 72, .08);
+}
+:root[data-theme="dark"] .pdp-wishlist-btn.is-active {
+  border-color: #ff8c98;
+  color: #ff8c98;
+  background: rgba(255, 140, 152, .1);
 }
 .pdp-wishlist-btn.is-active svg { fill: currentColor; }
 .pdp-trust-strip {
@@ -396,7 +401,7 @@
   letter-spacing: .04em;
   text-transform: uppercase;
 }
-.pdp-stock-pill.is-in { background: #e7f7ee; color: #148453; }
+.pdp-stock-pill.is-in { background: #e7f7ee; color: #0f7044; }
 .pdp-stock-pill.is-out { background: #fde8ea; color: #a6474e; }
 :root[data-theme="dark"] .pdp-stock-pill.is-in { background: #153b2d; color: #6cdda6; }
 :root[data-theme="dark"] .pdp-stock-pill.is-out { background: #3a1a1d; color: #ff7a84; }
