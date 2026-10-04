@@ -56,4 +56,15 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run browser audit
-        run: npm run test:ui
+        shell: bash
+        run: |
+          set +e
+          npm run test:ui 2>&1 | tee browser-audit.log
+          status=${PIPESTATUS[0]}
+          {
+            echo '### Browser audit output'
+            echo '```text'
+            cat browser-audit.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
