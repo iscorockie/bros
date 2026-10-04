@@ -38,6 +38,9 @@ jobs:
       - name: Check Python syntax
         run: python -m py_compile server.py scripts/upscale_images.py
 
+      - name: Test storefront API
+        run: python -m unittest discover -s tests -v
+
       - name: Check JavaScript syntax
         run: |
           node --check app.js

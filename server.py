@@ -18,6 +18,7 @@ Provides:
 import base64
 import datetime
 import json
+import math
 import os
 import random
 import re
@@ -58,6 +59,18 @@ def format_ugx(amount: int) -> str:
 
 def whatsapp_url(message: str) -> str:
     return f"https://wa.me/{PHONE}?text={urllib.parse.quote(message)}"
+
+
+def parse_bounded_int(value, default: int, minimum=None, maximum=None) -> int:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError, OverflowError):
+        return default
+    if minimum is not None:
+        parsed = max(minimum, parsed)
+    if maximum is not None:
+        parsed = min(maximum, parsed)
+    return parsed
 
 
 def build_product_description(name: str, category: str, price: int, sold_out: bool) -> str:
@@ -643,8 +656,8 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
                 products.sort(key=lambda x: (-x["views"], x["id"]))
 
             total = len(products)
-            page = max(1, int(query.get("page", ["1"])[0] or 1))
-            limit = int(query.get("limit", ["0"])[0] or 0)
+            page = parse_bounded_int(query.get("page", ["1"])[0], 1, minimum=1)
+            limit = parse_bounded_int(query.get("limit", ["0"])[0], 0, minimum=0, maximum=500)
             if limit > 0:
                 products = products[: page * limit]
 
@@ -905,9 +918,16 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
         prod_reviews_match = re.match(r"^/api/products/(\d+)/reviews$", path)
         if prod_reviews_match:
             pid = int(prod_reviews_match.group(1))
-            author = str(body.get("author") or "Verified Customer").strip()[:60]
-            rating = max(1, min(5, int(body.get("rating") or 5)))
+            author = str(body.get("author") or "Customer").strip()[:60] or "Customer"
+            try:
+                rating = int(body.get("rating", 5))
+            except (TypeError, ValueError, OverflowError):
+                self.send_json({"error": "Rating must be a whole number from 1 to 5."}, 400)
+                return
             comment = str(body.get("comment") or "").strip()[:800]
+            if not 1 <= rating <= 5:
+                self.send_json({"error": "Rating must be a whole number from 1 to 5."}, 400)
+                return
             if not comment:
                 self.send_json({"error": "Please write a brief review comment."}, 400)
                 return
@@ -915,8 +935,12 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
             with _db_lock:
                 conn = get_db()
                 cur = conn.cursor()
+                if not cur.execute("SELECT 1 FROM products WHERE id = ?", (pid,)).fetchone():
+                    conn.close()
+                    self.send_json({"error": "Product not found"}, 404)
+                    return
                 cur.execute(
-                    "INSERT INTO reviews (product_id, author, rating, comment, verified, created_at) VALUES (?, ?, ?, ?, 1, ?)",
+                    "INSERT INTO reviews (product_id, author, rating, comment, verified, created_at) VALUES (?, ?, ?, ?, 0, ?)",
                     (pid, author, rating, comment, now),
                 )
                 conn.commit()
@@ -1218,10 +1242,21 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
             return
 
         if path == "/api/upscale":
-            scale = float(body.get("scale") or 4)
+            try:
+                scale = float(body.get("scale") or 4)
+            except (TypeError, ValueError, OverflowError):
+                self.send_json({"error": "Scale must be a number."}, 400)
+                return
+            if not math.isfinite(scale) or not 1 <= scale <= 8:
+                self.send_json({"error": "Scale must be between 1 and 8."}, 400)
+                return
             product_id = body.get("productId")
             if product_id is not None:
-                pid = int(product_id)
+                try:
+                    pid = int(product_id)
+                except (TypeError, ValueError, OverflowError):
+                    self.send_json({"error": "Product ID must be a whole number."}, 400)
+                    return
                 with _db_lock:
                     conn = get_db()
                     row = conn.execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()

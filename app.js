@@ -101,9 +101,9 @@
     sort: 'featured',
     availableOnly: false,
     page: 1,
-    wishlist: normalizeWishlist(storage.json('bros_wishlist', [])),
+    wishlist: normalizeWishlist(storage.json('bros_wishlist', storage.json('bros_wishlist_v2', []))),
     compare: new Set(),
-    cart: normalizeCart(storage.json('bros_cart', [])),
+    cart: normalizeCart(storage.json('bros_cart', storage.json('bros_cart_v2', []))),
     heroSlide: 0,
     suggestionIndex: -1
   };
@@ -142,9 +142,13 @@
   }
 
   function normalizeCart(value) {
-    if (!Array.isArray(value)) return [];
-    return value.map(line => ({ id: Number(line.id), quantity: Math.max(1, Math.min(25, Number(line.quantity) || 1)) }))
-      .filter(line => Number.isInteger(line.id) && products[line.id]);
+    const lines = Array.isArray(value)
+      ? value
+      : value && typeof value === 'object'
+        ? Object.entries(value).map(([id, quantity]) => ({ id, quantity }))
+        : [];
+    return lines.map(line => ({ id: Number(line.id), quantity: Math.max(1, Math.min(25, Number(line.quantity) || 1)) }))
+      .filter(line => Number.isInteger(line.id) && products[line.id] && !products[line.id].soldOut);
   }
 
   function formatPrice(price) {
@@ -483,6 +487,10 @@
       const url = new URL(window.location.href);
       if (state.query) url.searchParams.set('q', state.query);
       else url.searchParams.delete('q');
+      if (state.category !== 'all') url.searchParams.set('category', state.category);
+      else url.searchParams.delete('category');
+      if (state.quickFilter !== 'all') url.searchParams.set('filter', state.quickFilter);
+      else url.searchParams.delete('filter');
       window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
     } catch (_) {}
   }
@@ -1078,8 +1086,17 @@
     updateCompare();
     $('#currentYear').textContent = new Date().getFullYear();
 
-    const initialQuery = new URLSearchParams(window.location.search).get('q');
-    if (initialQuery) setSearch(initialQuery, { hideSuggestions: true });
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialQuery = initialParams.get('q');
+    const initialCategory = initialParams.get('category');
+    const initialFilter = initialParams.get('filter');
+    if (initialQuery) {
+      setSearch(initialQuery, { hideSuggestions: true });
+    } else if (initialCategory && categories.includes(initialCategory)) {
+      setCategory(initialCategory);
+    } else if (['new', 'available', 'under-100', 'wishlist', 'picks'].includes(initialFilter)) {
+      setQuickFilter(initialFilter);
+    }
 
     attachEvents();
     markBrokenImages();
