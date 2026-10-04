@@ -41,16 +41,22 @@
   const SESSION_ID = getSessionId();
 
   async function apiRequest(endpoint, options = {}) {
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timeout = controller ? window.setTimeout(() => controller.abort(), 12000) : null;
     try {
       const headers = Object.assign(
         { 'Content-Type': 'application/json', 'X-Session-Id': SESSION_ID },
         options.headers || {}
       );
-      const res = await fetch(endpoint, Object.assign({}, options, { headers }));
+      const requestOptions = Object.assign({}, options, { headers });
+      if (controller) requestOptions.signal = controller.signal;
+      const res = await fetch(endpoint, requestOptions);
       if (!res.ok) return null;
       return await res.json();
     } catch (_) {
       return null;
+    } finally {
+      if (timeout !== null) window.clearTimeout(timeout);
     }
   }
 
@@ -115,8 +121,11 @@
   });
 
   const params = new URLSearchParams(window.location.search);
-  const requestedId = Number(params.get('id'));
-  const currentProduct = products[Number.isFinite(requestedId) && products[requestedId] ? requestedId : 0];
+  const rawRequestedId = params.get('id');
+  const requestedId = rawRequestedId === null ? 0 : Number(rawRequestedId);
+  const currentProduct = Number.isSafeInteger(requestedId) && requestedId >= 0
+    ? (products[requestedId] || null)
+    : null;
 
   const state = {
     product: currentProduct,
@@ -130,17 +139,16 @@
   const els = {
     themeToggle: document.getElementById('themeToggle'),
     wishlistCount: document.getElementById('wishlistCount'),
-    utilityWishlistCount: document.getElementById('utilityWishlistCount'),
     cartToggle: document.getElementById('cartToggle'),
     cartCount: document.getElementById('cartCount'),
     cartTotal: document.getElementById('cartTotal'),
-    utilityCartTotal: document.getElementById('utilityCartTotal'),
     breadcrumbCategory: document.getElementById('breadcrumbCategory'),
     breadcrumbProduct: document.getElementById('breadcrumbProduct'),
     pdpHero: document.getElementById('pdpHero'),
     pdpSpecList: document.getElementById('pdpSpecList'),
     pdpAvgRating: document.getElementById('pdpAvgRating'),
     pdpReviewCount: document.getElementById('pdpReviewCount'),
+    pdpRatingBadge: document.getElementById('pdpRatingBadge'),
     pdpReviewsList: document.getElementById('pdpReviewsList'),
     pdpReviewForm: document.getElementById('pdpReviewForm'),
     relatedHeading: document.getElementById('relatedHeading'),
@@ -158,6 +166,10 @@
     checkoutDialog: document.getElementById('checkoutDialog'),
     checkoutForm: document.getElementById('checkoutForm'),
     checkoutSummaryBox: document.getElementById('checkoutSummaryBox'),
+    checkoutError: document.getElementById('checkoutError'),
+    pdpSpecsSection: document.getElementById('pdpSpecsSection'),
+    reviewsSection: document.getElementById('reviewsSection'),
+    relatedSection: document.getElementById('relatedSection'),
     orderConfirmationBox: document.getElementById('orderConfirmationBox'),
     toastRegion: document.getElementById('toastRegion'),
     ageGate: document.getElementById('ageGate'),
@@ -176,15 +188,22 @@
     initAgeGate();
     syncThemeControl();
     if (!state.product) {
+      document.title = 'Product not found | Bros Smoke Shop Uganda';
       if (els.pdpHero) {
         els.pdpHero.innerHTML = `
           <div class="empty-state">
             <h2>Product not found</h2>
-            <p>The requested product could not be located in the Bros catalogue.</p>
+            <p>This product link may be out of date. Browse the catalogue to find another item.</p>
             <a class="button button-primary" href="index.html#catalogue">Back to full catalogue</a>
           </div>
         `;
       }
+      [els.pdpSpecsSection, els.reviewsSection, els.relatedSection, els.recentlyViewedSection].forEach((section) => {
+        if (section) section.hidden = true;
+      });
+      updateCartUI();
+      updateWishlistUI();
+      bindEvents();
       return;
     }
 
@@ -484,16 +503,23 @@
       if (Array.isArray(data.product.reviews)) {
         state.reviews = data.product.reviews;
       }
-      renderReviews(data.product.avg_rating || 4.9, data.product.review_count || state.reviews.length);
+      renderReviews(data.product.avg_rating, data.product.review_count || state.reviews.length);
     } else {
-      renderReviews(4.9, 0);
+      renderReviews(null, state.reviews.length);
     }
   }
 
-  function renderReviews(avgRating = 4.9, reviewCount = 0) {
-    if (els.pdpAvgRating) els.pdpAvgRating.textContent = Number(avgRating || 4.9).toFixed(1);
+  function renderReviews(avgRating = null, reviewCount = 0) {
+    const hasReviews = reviewCount > 0 && state.reviews.length > 0;
+    const rating = Number(avgRating);
+    const hasAverage = avgRating !== null && avgRating !== undefined && String(avgRating).trim() !== '' && Number.isFinite(rating);
+    if (els.pdpAvgRating) {
+      els.pdpAvgRating.textContent = hasReviews ? (hasAverage ? rating.toFixed(1) : (state.reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / state.reviews.length).toFixed(1)) : '—';
+    }
+    const ratingStar = els.pdpRatingBadge?.querySelector('.proof-star');
+    if (ratingStar) ratingStar.hidden = !hasReviews;
     if (els.pdpReviewCount) {
-      els.pdpReviewCount.textContent = reviewCount > 0 ? `${reviewCount} review${reviewCount === 1 ? '' : 's'}` : 'Verified Store';
+      els.pdpReviewCount.textContent = hasReviews ? `${reviewCount} review${reviewCount === 1 ? '' : 's'}` : 'No reviews yet';
     }
 
     if (!els.pdpReviewsList) return;
@@ -502,10 +528,9 @@
       els.pdpReviewsList.innerHTML = `
         <div class="pdp-review-card glass-tile">
           <div class="pdp-review-top">
-            <strong>Bros Quality Guarantee</strong>
-            <span class="pdp-stars" aria-label="5 out of 5 stars">★★★★★</span>
+            <strong>Be the first to review this product</strong>
           </div>
-          <p>Every ${escapeHtml(state.product.name)} is inspected by our Kampala team before dispatch. Have a question or already tried it? Leave the first customer review!</p>
+          <p>Have a question or already tried it? Share your experience with other shoppers.</p>
         </div>
       `;
       return;
@@ -644,7 +669,6 @@
     if (els.cartCount) els.cartCount.textContent = String(totalCount);
     if (els.cartHeadingCount) els.cartHeadingCount.textContent = `(${totalCount})`;
     if (els.cartTotal) els.cartTotal.textContent = formattedSubtotal;
-    if (els.utilityCartTotal) els.utilityCartTotal.textContent = formattedSubtotal;
     if (els.cartSubtotal) els.cartSubtotal.textContent = formattedSubtotal;
 
     if (els.cartEmpty) els.cartEmpty.hidden = entries.length > 0;
@@ -724,31 +748,57 @@
       els.wishlistCount.textContent = String(count);
       els.wishlistCount.hidden = count === 0;
     }
-    if (els.utilityWishlistCount) {
-      els.utilityWishlistCount.textContent = String(count);
-      els.utilityWishlistCount.hidden = count === 0;
+  }
+
+  function getDeliveryFee(subtotal, paymentMethod = '') {
+    return subtotal >= FREE_DELIVERY_THRESHOLD || /pickup/i.test(paymentMethod) ? 0 : 10000;
+  }
+
+  function syncCheckoutLocationField() {
+    const paymentMethod = document.getElementById('orderPaymentMethod')?.value || '';
+    const areaInput = document.getElementById('orderDeliveryArea');
+    const areaLabel = document.getElementById('orderDeliveryAreaLabel');
+    const isPickup = /pickup/i.test(paymentMethod);
+
+    if (areaInput) {
+      areaInput.required = !isPickup;
+      areaInput.setAttribute('aria-required', String(!isPickup));
+      areaInput.placeholder = isPickup ? 'Optional for store pickup' : 'e.g. Kololo, Ntinda, or Nakasero';
     }
+    if (areaLabel) {
+      areaLabel.textContent = isPickup
+        ? 'Pickup location (optional)'
+        : 'Kampala area or delivery location *';
+    }
+    renderCheckoutSummary();
+  }
+
+  function renderCheckoutSummary() {
+    const entries = getCartEntries();
+    if (!entries.length || !els.checkoutSummaryBox) return;
+    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
+    const paymentMethod = document.getElementById('orderPaymentMethod')?.value || '';
+    const isPickup = /pickup/i.test(paymentMethod);
+    const deliveryFee = getDeliveryFee(subtotal, paymentMethod);
+    const total = subtotal + deliveryFee;
+    els.checkoutSummaryBox.innerHTML = `
+      <div class="summary-line"><span>Items (${entries.reduce((sum, entry) => sum + entry.quantity, 0)})</span><strong>${formatUGX(subtotal)}</strong></div>
+      <div class="summary-line"><span>${isPickup ? 'Fulfilment' : 'Kampala Delivery'}</span><strong>${isPickup ? 'Store pickup' : deliveryFee === 0 ? 'FREE' : formatUGX(deliveryFee)}</strong></div>
+      <div class="summary-line summary-total"><span>Total Payable</span><strong>${formatUGX(total)}</strong></div>
+    `;
   }
 
   function openCheckoutDialog() {
     const entries = getCartEntries();
     if (!entries.length || !els.checkoutDialog) return;
 
-    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
-    const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 10000;
-    const total = subtotal + deliveryFee;
-
     if (els.checkoutForm) els.checkoutForm.hidden = false;
     if (els.orderConfirmationBox) els.orderConfirmationBox.hidden = true;
-
-    if (els.checkoutSummaryBox) {
-      els.checkoutSummaryBox.innerHTML = `
-        <div class="summary-line"><span>Items (${entries.reduce((s, e) => s + e.quantity, 0)})</span><strong>${formatUGX(subtotal)}</strong></div>
-        <div class="summary-line"><span>Kampala Delivery</span><strong>${deliveryFee === 0 ? 'FREE' : formatUGX(deliveryFee)}</strong></div>
-        <div class="summary-line summary-total"><span>Total Payable</span><strong>${formatUGX(total)}</strong></div>
-      `;
+    if (els.checkoutError) {
+      els.checkoutError.hidden = true;
+      els.checkoutError.textContent = '';
     }
-
+    renderCheckoutSummary();
     closeDialog(els.cartDialog);
     openDialog(els.checkoutDialog);
   }
@@ -760,15 +810,23 @@
 
     const customerName = document.getElementById('orderCustomerName')?.value.trim() || '';
     const customerPhone = document.getElementById('orderCustomerPhone')?.value.trim() || '';
-    const deliveryArea = document.getElementById('orderDeliveryArea')?.value.trim() || '';
     const paymentMethod = document.getElementById('orderPaymentMethod')?.value || 'Cash on Delivery';
+    const isPickup = /pickup/i.test(paymentMethod);
+    const deliveryArea = document.getElementById('orderDeliveryArea')?.value.trim() || (isPickup ? 'Kampala' : '');
     const deliveryNotes = document.getElementById('orderDeliveryNotes')?.value.trim() || '';
 
-    if (!customerName || !customerPhone || !deliveryArea) {
-      showToast('Please fill in your name, phone number, and Kampala delivery area.');
+    if (!customerName || !customerPhone || (!isPickup && !deliveryArea)) {
+      showToast(isPickup
+        ? 'Please fill in your name and phone number.'
+        : 'Please fill in your name, phone number, and Kampala delivery area.');
       return;
     }
 
+    const submitBtn = document.getElementById('submitOrderBtn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing order...';
+    }
     const res = await apiRequest('/api/orders', {
       method: 'POST',
       body: JSON.stringify({
@@ -781,26 +839,51 @@
         items: entries.map(({ product, quantity }) => ({ id: product.id, quantity })),
       }),
     });
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm Order';
+    }
 
-    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
-    const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 10000;
-    const total = subtotal + deliveryFee;
+    if (!res || !res.order) {
+      const fallbackUrl = buildWhatsAppUrl([
+        'Hi Bros! I could not complete checkout on the website and would like to place this order:',
+        '',
+        ...entries.map(({ product, quantity }) => `- ${quantity}x ${product.name} (${product.price})`),
+        '',
+        `Name: ${customerName}`,
+        `Phone: ${customerPhone}`,
+        `${isPickup ? 'Fulfilment' : 'Delivery area'}: ${isPickup ? 'Store pickup in Kampala' : deliveryArea}`,
+        `Payment: ${paymentMethod}`,
+        ...(deliveryNotes ? [`Notes: ${deliveryNotes}`] : []),
+      ].join('\n'));
+      if (els.checkoutError) {
+        els.checkoutError.innerHTML = `We couldn't save your order just now. Your bag is safe — please retry, or <a href="${escapeHtml(fallbackUrl)}" target="_blank" rel="noopener noreferrer">send it to Bros on WhatsApp</a>.`;
+        els.checkoutError.hidden = false;
+      }
+      showToast('Order was not saved. Your bag is still available.');
+      return;
+    }
 
-    const orderRecord = (res && res.order) ? res.order : {
-      order_code: 'BROS-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
-      customer_name: customerName,
-      delivery_area: deliveryArea,
-      total,
-      whatsapp_url: buildWhatsAppUrl(
-        `Hi Bros! I placed order for ${entries.map(e => `${e.quantity}x ${e.product.name}`).join(', ')} (${formatUGX(total)}) to ${deliveryArea}.`
-      ),
-    };
+    const orderRecord = res.order;
+    orderRecord.order_code = orderRecord.order_code || orderRecord.orderRef;
+    orderRecord.customer_name = orderRecord.customer_name || orderRecord.customerName || customerName;
+    orderRecord.delivery_area = orderRecord.delivery_area || orderRecord.deliveryArea || deliveryArea;
+    orderRecord.whatsapp_url = orderRecord.whatsapp_url || orderRecord.whatsappUrl || buildWhatsAppUrl(
+      `Hi Bros! Please confirm order ${orderRecord.order_code} for ${customerName} to ${deliveryArea}.`
+    );
 
     try {
       const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.orders) || '[]');
       existing.unshift(orderRecord);
       localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(existing.slice(0, 20)));
     } catch (_) {}
+
+    const orderIsPickup = /pickup/i.test(
+      orderRecord.payment_method || orderRecord.paymentMethod || paymentMethod
+    );
+    const fulfillmentCopy = orderIsPickup
+      ? 'for store pickup in Kampala'
+      : `for delivery to <strong>${escapeHtml(orderRecord.delivery_area)}</strong>`;
 
     state.cart = {};
     saveCart();
@@ -813,7 +896,7 @@
         <div class="order-success-card">
           <span class="eyebrow-pill"><span class="eyebrow-dot"></span> Order Confirmed</span>
           <h3>Thank you, ${escapeHtml(orderRecord.customer_name)}!</h3>
-          <p>Your order <strong>${escapeHtml(orderRecord.order_code)}</strong> has been registered for delivery to <strong>${escapeHtml(orderRecord.delivery_area)}</strong>.</p>
+          <p>Your order <strong>${escapeHtml(orderRecord.order_code)}</strong> has been registered ${fulfillmentCopy}.</p>
           <div class="order-code-banner">
             <span>Order Reference</span>
             <strong>${escapeHtml(orderRecord.order_code)}</strong>
@@ -893,6 +976,8 @@
     els.checkoutWhatsApp?.addEventListener('click', checkoutOnWhatsApp);
     els.openCheckoutModal?.addEventListener('click', openCheckoutDialog);
     els.checkoutForm?.addEventListener('submit', submitOrder);
+    document.getElementById('orderPaymentMethod')?.addEventListener('change', syncCheckoutLocationField);
+    syncCheckoutLocationField();
 
     els.pdpReviewForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -905,16 +990,13 @@
         method: 'POST',
         body: JSON.stringify({ author, rating, comment }),
       });
+      if (!res || !res.review) {
+        showToast('We could not post your review just now. Please try again later.');
+        return;
+      }
 
-      const newReview = (res && res.review) ? res.review : {
-        author,
-        rating,
-        comment,
-        created_at: Math.floor(Date.now() / 1000),
-      };
-
-      state.reviews.unshift(newReview);
-      const avg = state.reviews.reduce((s, r) => s + Number(r.rating || 5), 0) / state.reviews.length;
+      state.reviews.unshift(res.review);
+      const avg = state.reviews.reduce((sum, review) => sum + Number(review.rating || 5), 0) / state.reviews.length;
       renderReviews(avg, state.reviews.length);
       els.pdpReviewForm.reset();
       showToast('Thank you! Your review has been posted.');

@@ -1030,7 +1030,7 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
                     self.send_json({"error": "No valid products in order."}, 400)
                     return
 
-                is_pickup = "pickup" in delivery_area.lower()
+                is_pickup = "pickup" in delivery_area.lower() or "pickup" in payment_method.lower()
                 delivery_fee = (
                     0 if (subtotal >= FREE_DELIVERY_THRESHOLD or is_pickup) else STANDARD_DELIVERY_FEE
                 )
@@ -1044,15 +1044,18 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
                     for item in order_items
                 )
                 delivery_txt = (
-                    "Complimentary Kampala delivery"
+                    "Store pickup in Kampala"
+                    if is_pickup
+                    else "Complimentary Kampala delivery"
                     if delivery_fee == 0
                     else format_ugx(delivery_fee)
                 )
+                fulfillment_label = "Fulfilment" if is_pickup else f"Delivery ({delivery_area})"
                 wa_msg = (
                     f"Hi Bros! I'd like to confirm my order #{order_ref}:\n"
                     f"{lines_txt}\n\n"
                     f"Subtotal: {format_ugx(subtotal)}\n"
-                    f"Delivery ({delivery_area}): {delivery_txt}\n"
+                    f"{fulfillment_label}: {delivery_txt}\n"
                     f"Total: {format_ugx(total)}\n"
                     f"Name: {customer_name}"
                     + (f"\nPhone: {customer_phone}" if customer_phone else "")
