@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: CI / checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Check Python syntax
+        run: python -m py_compile server.py scripts/upscale_images.py
+
+      - name: Test storefront API
+        run: python -m unittest discover -s tests -v
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check product.js
+          node --check products.js
+
+      - name: Validate HTML
+        run: npx --yes html-validate@11.16.2 index.html product.html
+
+      - name: Install browser-audit dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run browser audit
+        shell: bash
+        run: |
+          set +e
+          npm run test:ui 2>&1 | tee browser-audit.log
+          status=${PIPESTATUS[0]}
+          {
+            echo '### Browser audit output'
+            echo '```text'
+            cat browser-audit.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$status" -ne 0 ]]; then
+            message=$(tail -80 browser-audit.log)
+            message=${message//'%'/'%25'}
+            message=${message//$'\r'/'%0D'}
+            message=${message//$'\n'/'%0A'}
+            echo "::error file=tests/browser_audit.mjs,title=Browser audit failed::$message"
+          fi
+          exit "$status"

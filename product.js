@@ -6,8 +6,10 @@
   const NEW_ARRIVAL_COUNT = 12;
   const STORAGE_KEYS = {
     theme: 'bros_theme',
-    cart: 'bros_cart_v2',
-    wishlist: 'bros_wishlist_v2',
+    cart: 'bros_cart',
+    legacyCart: 'bros_cart_v2',
+    wishlist: 'bros_wishlist',
+    legacyWishlist: 'bros_wishlist_v2',
     session: 'bros_session_id',
     orders: 'bros_orders_v1',
     viewed: 'bros_recently_viewed_v1',
@@ -388,7 +390,7 @@
     });
 
     document.getElementById('pdpQtyPlus')?.addEventListener('click', () => {
-      state.quantity = Math.min(99, state.quantity + 1);
+      state.quantity = Math.min(25, state.quantity + 1);
       syncQtyDisplay();
     });
 
@@ -610,11 +612,16 @@
 
   function loadCart() {
     try {
-      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.cart) || '{}');
-      if (!parsed || typeof parsed !== 'object') return {};
+      const raw = localStorage.getItem(STORAGE_KEYS.cart) || localStorage.getItem(STORAGE_KEYS.legacyCart);
+      const parsed = JSON.parse(raw || '[]');
+      const lines = Array.isArray(parsed)
+        ? parsed.map((line) => [line?.id, line?.quantity])
+        : parsed && typeof parsed === 'object'
+          ? Object.entries(parsed)
+          : [];
       return Object.fromEntries(
-        Object.entries(parsed)
-          .map(([id, qty]) => [Number(id), Math.max(1, Math.min(99, Number(qty) || 0))])
+        lines
+          .map(([id, qty]) => [Number(id), Math.max(1, Math.min(25, Number(qty) || 0))])
           .filter(([id, qty]) => products[id] && !products[id].soldOut && qty > 0)
       );
     } catch (_) {
@@ -623,12 +630,17 @@
   }
 
   function saveCart() {
+    const items = Object.entries(state.cart).map(([id, quantity]) => ({
+      id: Number(id),
+      quantity: Math.max(1, Math.min(25, Number(quantity) || 1)),
+    }));
     try {
-      localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(state.cart));
+      localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(items));
+      localStorage.removeItem(STORAGE_KEYS.legacyCart);
     } catch (_) {}
     apiRequest('/api/cart', {
       method: 'POST',
-      body: JSON.stringify({ session_id: SESSION_ID, items: state.cart }),
+      body: JSON.stringify({ session_id: SESSION_ID, items }),
     });
   }
 
@@ -636,7 +648,7 @@
     const product = products[Number(productId)];
     if (!product || product.soldOut) return;
     const nextQty = (state.cart[product.id] || 0) + quantity;
-    state.cart[product.id] = Math.min(99, Math.max(1, nextQty));
+    state.cart[product.id] = Math.min(25, Math.max(1, nextQty));
     saveCart();
     updateCartUI();
     showToast(`Added ${quantity}× ${product.name} to your bag.`);
@@ -646,7 +658,7 @@
     const id = Number(productId);
     if (!products[id]) return;
     if (nextQty <= 0) delete state.cart[id];
-    else state.cart[id] = Math.min(99, nextQty);
+    else state.cart[id] = Math.min(25, nextQty);
     saveCart();
     updateCartUI();
   }
@@ -706,7 +718,8 @@
 
   function loadWishlist() {
     try {
-      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.wishlist) || '[]');
+      const raw = localStorage.getItem(STORAGE_KEYS.wishlist) || localStorage.getItem(STORAGE_KEYS.legacyWishlist);
+      const parsed = JSON.parse(raw || '[]');
       return new Set(Array.isArray(parsed) ? parsed.map(Number).filter((id) => products[id]) : []);
     } catch (_) {
       return new Set();
@@ -716,6 +729,7 @@
   function saveWishlist() {
     try {
       localStorage.setItem(STORAGE_KEYS.wishlist, JSON.stringify([...state.wishlist]));
+      localStorage.removeItem(STORAGE_KEYS.legacyWishlist);
     } catch (_) {}
     apiRequest('/api/wishlist', {
       method: 'POST',
@@ -970,6 +984,12 @@
       if (event.target === els.pdpZoom) closeZoom();
     });
     document.addEventListener('keydown', (event) => {
+      const pageTrigger = event.target instanceof Element ? event.target.closest('[data-open-page]') : null;
+      if (pageTrigger && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        window.location.href = getProductUrl(pageTrigger.getAttribute('data-open-page'));
+        return;
+      }
       if (event.key === 'Escape') closeZoom();
     });
     els.cartToggle?.addEventListener('click', (event) => openDialog(els.cartDialog, event.currentTarget));
