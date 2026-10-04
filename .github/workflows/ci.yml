@@ -49,3 +49,11 @@ jobs:
 
       - name: Validate HTML
         run: npx --yes html-validate@11.16.2 index.html product.html
+
+      - name: Install browser-audit dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run browser audit
+        run: npm run test:ui
