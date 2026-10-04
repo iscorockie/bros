@@ -100,6 +100,7 @@ async function assertImages(page, selector, label) {
 async function auditDesktopHome(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const failures = observe(page, 'desktop home');
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
@@ -168,6 +169,7 @@ async function auditMobileHome(browser) {
   });
   await context.addInitScript(() => localStorage.setItem('bros_age_verified', '1'));
   const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const failures = observe(page, 'mobile home');
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.locator('#productsGrid .product-card').first().waitFor();
@@ -192,6 +194,7 @@ async function auditProductPage(context) {
     localStorage.setItem('bros_theme', 'light');
   });
   const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const failures = observe(page, 'product page');
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${origin}/product.html?id=0`, { waitUntil: 'domcontentloaded' });

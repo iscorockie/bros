@@ -187,7 +187,7 @@ html.age-verified .age-gate { display: none; }
 .language-menu > * + * { margin-top: 3px; }
 .language-menu > a:hover { background: var(--surface-soft); }
 .language-menu span span, .language-menu a span { color: var(--muted); font-size: .67rem; font-weight: 500; }
-.site-header { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); transition: box-shadow .25s ease, background .25s ease; }
+.site-header { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--line); background: var(--surface); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); transition: box-shadow .25s ease, background .25s ease; }
 .site-header.is-scrolled { box-shadow: 0 7px 24px rgba(11, 32, 67, .08); }
 :root[data-theme="dark"] .site-header.is-scrolled { box-shadow: 0 7px 24px rgba(0,0,0,.2); }
 .header-inner { position: relative; display: flex; min-height: 78px; align-items: center; gap: clamp(18px, 2.4vw, 34px); }
