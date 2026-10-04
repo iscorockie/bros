@@ -122,6 +122,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .button svg { width: 18px; height: 18px; }
 .button-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 18px rgba(8, 102, 245, .20); }
 .button-primary:hover { background: var(--blue-deep); box-shadow: 0 12px 24px rgba(8, 102, 245, .27); }
+:root[data-theme="dark"] .button-primary { background: #286ed8; }
+:root[data-theme="dark"] .button-primary:hover { background: #1e5bbd; }
 .button-gold { background: var(--gold); color: #16233a; box-shadow: 0 10px 24px rgba(231, 180, 77, .20); }
 .button-gold:hover { background: #ffd782; box-shadow: 0 14px 28px rgba(231, 180, 77, .28); }
 .button-outline { border-color: var(--line-strong); background: var(--surface); color: var(--ink-strong); }
@@ -440,6 +442,7 @@ html.age-verified .age-gate { display: none; }
 .category-chip { display: inline-flex; min-height: 34px; flex: 0 0 auto; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--muted-strong); font-size: .68rem; font-weight: 650; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
 .category-chip:hover { border-color: rgba(8,102,245,.36); color: var(--blue); }
 .category-chip.is-active { border-color: var(--blue); background: var(--blue); color: #fff; }
+:root[data-theme="dark"] .category-chip.is-active { border-color: #286ed8; background: #286ed8; }
 .category-chip .chip-count { opacity: 1; font-size: .58rem; }
 .filter-options { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
 .select-control { display: flex; min-height: 38px; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--muted-strong); }
@@ -559,7 +562,8 @@ html.age-verified .age-gate { display: none; }
 .footer-main { display: grid; grid-template-columns: 1.45fr .72fr .8fr 1.15fr; gap: 36px; padding-bottom: 40px; }
 .footer-brand { margin-bottom: 16px; }
 .footer-brand-column > p { max-width: 320px; margin: 0 0 15px; color: var(--muted); font-size: .76rem; line-height: 1.68; }
-.footer-whatsapp { display: inline-flex; align-items: center; gap: 7px; color: #168352; font-size: .69rem; font-weight: 700; }
+.footer-whatsapp { display: inline-flex; align-items: center; gap: 7px; color: #117547; font-size: .69rem; font-weight: 700; }
+:root[data-theme="dark"] .footer-whatsapp { color: #75e0ac; }
 .footer-whatsapp .wa-icon { width: 16px; height: 16px; }
 .footer-whatsapp strong { color: var(--ink-strong); }
 .footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
