@@ -223,6 +223,8 @@ async function auditProductPage(context) {
   await page.locator('#checkoutForm').evaluate(form => form.requestSubmit());
   await page.locator('#orderConfirmationBox:not([hidden])').waitFor();
   assert.match(await page.locator('#orderConfirmationBox').innerText(), /Order Reference/i);
+  await page.locator('#orderConfirmationBox [data-close-dialog]').click();
+  await page.locator('#checkoutDialog[open]').waitFor({ state: 'detached' });
 
   await page.locator('#themeToggle').click();
   await runAxe(page, 'desktop product dark');
