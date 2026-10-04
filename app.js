@@ -84,16 +84,22 @@
   const SESSION_ID = getSessionId();
 
   async function apiRequest(endpoint, options = {}) {
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timeout = controller ? window.setTimeout(() => controller.abort(), 12000) : null;
     try {
       const headers = Object.assign(
         { 'Content-Type': 'application/json', 'X-Session-Id': SESSION_ID },
         options.headers || {}
       );
-      const res = await fetch(endpoint, Object.assign({}, options, { headers }));
+      const requestOptions = Object.assign({}, options, { headers });
+      if (controller) requestOptions.signal = controller.signal;
+      const res = await fetch(endpoint, requestOptions);
       if (!res.ok) return null;
       return await res.json();
     } catch (_) {
       return null;
+    } finally {
+      if (timeout !== null) window.clearTimeout(timeout);
     }
   }
 
@@ -173,15 +179,12 @@
     searchClear: document.getElementById('searchClear'),
     searchSuggestions: document.getElementById('searchSuggestions'),
     wishlistToggle: document.getElementById('wishlistToggle'),
-    wishlistUtility: document.getElementById('wishlistUtility'),
     wishlistCount: document.getElementById('wishlistCount'),
-    utilityWishlistCount: document.getElementById('utilityWishlistCount'),
     savedTabCount: document.getElementById('savedTabCount'),
     cartToggle: document.getElementById('cartToggle'),
     cartCount: document.getElementById('cartCount'),
     mobileCartCount: document.getElementById('mobileCartCount'),
     cartTotal: document.getElementById('cartTotal'),
-    utilityCartTotal: document.getElementById('utilityCartTotal'),
     heroImageFrame: document.getElementById('heroImageFrame'),
     heroImage: document.getElementById('heroImage'),
     heroProductCategory: document.getElementById('heroProductCategory'),
@@ -226,6 +229,7 @@
     checkoutDialog: document.getElementById('checkoutDialog'),
     checkoutForm: document.getElementById('checkoutForm'),
     checkoutSummaryBox: document.getElementById('checkoutSummaryBox'),
+    checkoutError: document.getElementById('checkoutError'),
     orderConfirmationBox: document.getElementById('orderConfirmationBox'),
     ordersDialog: document.getElementById('ordersDialog'),
     ordersBody: document.getElementById('ordersBody'),
@@ -234,7 +238,6 @@
     updatesForm: document.getElementById('updatesForm'),
     updatesEmail: document.getElementById('updatesEmail'),
     updatesFeedback: document.getElementById('updatesFeedback'),
-    startingPrice: document.getElementById('startingPrice'),
     currentYear: document.getElementById('currentYear'),
   };
 
@@ -247,7 +250,6 @@
     applyQueryFilters();
     syncThemeControl();
     initAgeGate();
-    populateEditorialImages();
     renderCategories();
     renderHero();
     renderFeatured();
@@ -432,38 +434,10 @@
     syncThemeControl();
   }
 
-  function populateEditorialImages() {
-    const available = products.filter((item) => !item.soldOut);
-    const lowest = available.reduce((min, item) => (item.priceNumber > 0 && item.priceNumber < min ? item.priceNumber : min), Infinity);
-    if (els.startingPrice && Number.isFinite(lowest)) {
-      els.startingPrice.textContent = formatUGX(lowest);
-    }
-
-    const imageAssignments = [
-      ['promoImageDelivery', products[1] || findProduct((item) => item.category === 'Vapes' && !item.soldOut)],
-      ['promoImageNew', products[5] || findProduct((item) => item.badge === 'New' && !item.soldOut)],
-      ['promoImageAccessories', products[8] || findProduct((item) => item.category === 'Accessories' && !item.soldOut)],
-      ['storyImageValue', findProduct((item) => item.priceNumber > 0 && item.priceNumber <= 30000 && !item.soldOut)],
-      ['storyImageLighter', findProduct((item) => item.category === 'Lighters' && !item.soldOut)],
-      ['storyImageEssentials', findProduct((item) => item.category === 'Rolling Papers' && !item.soldOut)],
-    ];
-
-    imageAssignments.forEach(([id, product]) => {
-      const img = document.getElementById(id);
-      if (!img || !product) return;
-      img.src = product.image;
-      img.alt = product.name;
-      wireImageFallback(img, product);
-    });
-  }
-
-  function findProduct(predicate) {
-    return products.find(predicate) || products[0];
-  }
-
   function wireImageFallback(img, product) {
     if (!img) return;
-    img.addEventListener('error', () => {
+    // Replace the handler when a persistent image (like the hero) changes products.
+    img.onerror = () => {
       img.classList.add('is-broken');
       const parent = img.parentElement;
       if (parent && !parent.querySelector('.image-fallback')) {
@@ -472,7 +446,7 @@
         fallback.innerHTML = `<strong>b.</strong><small>${escapeHtml(product?.category || 'Bros')}</small>`;
         parent.appendChild(fallback);
       }
-    }, { once: true });
+    };
   }
 
   function getHeroProducts() {
@@ -584,7 +558,6 @@
 
     if (els.categoryGrid) {
       els.categoryGrid.innerHTML = departmentCategories
-        .slice(0, 8)
         .map((category) => `
           <button class="category-tile category-card tone-${escapeHtml(category.tone)} ${state.category === category.name ? 'is-active' : ''}" type="button" data-select-category="${escapeHtml(category.name)}">
             <span class="category-icon" aria-hidden="true">${category.icon}</span>
@@ -729,7 +702,7 @@
   function renderProductCard(product, options = {}) {
     const saved = state.wishlist.has(product.id);
     const compared = state.compare.has(product.id);
-    const badgeLabel = product.soldOut ? 'Sold out' : product.badge ? 'New arrival' : 'Available';
+    const badgeLabel = product.soldOut ? 'Sold out' : product.badge;
     const badgeClass = product.soldOut ? ' is-sold' : product.badge ? ' is-new' : '';
     const productHref = getProductUrl(product);
 
@@ -737,7 +710,7 @@
       <article class="product-card ${product.soldOut ? 'is-unavailable' : ''} ${options.compact ? 'is-compact' : ''}" data-product-id="${product.id}" data-product-href="${escapeHtml(productHref)}">
         <div class="product-media" role="link" tabindex="0" data-open-page="${product.id}" aria-label="Open ${escapeHtml(product.name)} product page">
           <img class="upscaled-img" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async">
-          <span class="product-badge${badgeClass}">${badgeLabel}</span>
+          ${badgeLabel ? `<span class="product-badge${badgeClass}">${escapeHtml(badgeLabel)}</span>` : ''}
           <div class="product-card-actions">
             <button class="product-mini-action ${saved ? 'is-saved' : ''}" type="button" data-toggle-wishlist="${product.id}" aria-label="${saved ? 'Remove' : 'Save'} ${escapeHtml(product.name)}" aria-pressed="${saved}" title="${saved ? 'Remove from saved items' : 'Save for later'}">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.2-8.8 10.2S3.2 13.9 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"/></svg>
@@ -752,14 +725,10 @@
           </button>
         </div>
         <div class="product-info">
-          <div class="product-category">
-            <span>${escapeHtml(product.category)}</span>
-            <span class="product-status">${product.soldOut ? 'Sold out' : 'Available'}</span>
-          </div>
+          <div class="product-category"><span>${escapeHtml(product.category)}</span></div>
           <h3><a class="product-title-link" href="${escapeHtml(productHref)}">${escapeHtml(product.name)}</a></h3>
           <div class="product-price-line">
             <span class="product-price">${escapeHtml(product.price)}</span>
-            <a class="product-price-note" href="${escapeHtml(productHref)}">View details →</a>
           </div>
           <div class="product-actions">
             <a class="product-chat" href="${escapeHtml(productWhatsAppUrl(product))}" target="_blank" rel="noopener noreferrer" aria-label="Ask about ${escapeHtml(product.name)} on WhatsApp">
@@ -795,7 +764,9 @@
 
   function syncQuickTabs() {
     document.querySelectorAll('.catalogue-tab').forEach((tab) => {
-      tab.classList.toggle('is-active', tab.dataset.quickFilter === state.quickFilter);
+      const active = tab.dataset.quickFilter === state.quickFilter;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-pressed', String(active));
     });
   }
 
@@ -999,7 +970,6 @@
     if (els.mobileCartCount) els.mobileCartCount.textContent = String(totalCount);
     if (els.cartHeadingCount) els.cartHeadingCount.textContent = `(${totalCount})`;
     if (els.cartTotal) els.cartTotal.textContent = formattedSubtotal;
-    if (els.utilityCartTotal) els.utilityCartTotal.textContent = formattedSubtotal;
     if (els.cartSubtotal) els.cartSubtotal.textContent = formattedSubtotal;
 
     if (els.cartEmpty) els.cartEmpty.hidden = entries.length > 0;
@@ -1052,25 +1022,55 @@
     window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   }
 
+  function getDeliveryFee(subtotal, paymentMethod = '') {
+    return subtotal >= FREE_DELIVERY_THRESHOLD || /pickup/i.test(paymentMethod) ? 0 : 10000;
+  }
+
+  function syncCheckoutLocationField() {
+    const paymentMethod = document.getElementById('orderPaymentMethod')?.value || '';
+    const areaInput = document.getElementById('orderDeliveryArea');
+    const areaLabel = document.getElementById('orderDeliveryAreaLabel');
+    const isPickup = /pickup/i.test(paymentMethod);
+
+    if (areaInput) {
+      areaInput.required = !isPickup;
+      areaInput.setAttribute('aria-required', String(!isPickup));
+      areaInput.placeholder = isPickup ? 'Optional for store pickup' : 'e.g. Kololo, Ntinda, or Nakasero';
+    }
+    if (areaLabel) {
+      areaLabel.textContent = isPickup
+        ? 'Pickup location (optional)'
+        : 'Kampala area or delivery location *';
+    }
+    renderCheckoutSummary();
+  }
+
+  function renderCheckoutSummary() {
+    const entries = getCartEntries();
+    if (!entries.length || !els.checkoutSummaryBox) return;
+    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
+    const paymentMethod = document.getElementById('orderPaymentMethod')?.value || '';
+    const isPickup = /pickup/i.test(paymentMethod);
+    const deliveryFee = getDeliveryFee(subtotal, paymentMethod);
+    const total = subtotal + deliveryFee;
+    els.checkoutSummaryBox.innerHTML = `
+      <div class="summary-line"><span>Items (${entries.reduce((sum, entry) => sum + entry.quantity, 0)})</span><strong>${formatUGX(subtotal)}</strong></div>
+      <div class="summary-line"><span>${isPickup ? 'Fulfilment' : 'Kampala Delivery'}</span><strong>${isPickup ? 'Store pickup' : deliveryFee === 0 ? 'FREE' : formatUGX(deliveryFee)}</strong></div>
+      <div class="summary-line summary-total"><span>Total Payable</span><strong>${formatUGX(total)}</strong></div>
+    `;
+  }
+
   function openCheckoutDialog() {
     const entries = getCartEntries();
     if (!entries.length || !els.checkoutDialog) return;
 
-    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
-    const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 10000;
-    const total = subtotal + deliveryFee;
-
     if (els.checkoutForm) els.checkoutForm.hidden = false;
     if (els.orderConfirmationBox) els.orderConfirmationBox.hidden = true;
-
-    if (els.checkoutSummaryBox) {
-      els.checkoutSummaryBox.innerHTML = `
-        <div class="summary-line"><span>Items (${entries.reduce((s, e) => s + e.quantity, 0)})</span><strong>${formatUGX(subtotal)}</strong></div>
-        <div class="summary-line"><span>Kampala Delivery</span><strong>${deliveryFee === 0 ? 'FREE' : formatUGX(deliveryFee)}</strong></div>
-        <div class="summary-line summary-total"><span>Total Payable</span><strong>${formatUGX(total)}</strong></div>
-      `;
+    if (els.checkoutError) {
+      els.checkoutError.hidden = true;
+      els.checkoutError.textContent = '';
     }
-
+    renderCheckoutSummary();
     closeDialog(els.cartDialog);
     openDialog(els.checkoutDialog);
   }
@@ -1082,12 +1082,15 @@
 
     const customerName = document.getElementById('orderCustomerName')?.value.trim() || '';
     const customerPhone = document.getElementById('orderCustomerPhone')?.value.trim() || '';
-    const deliveryArea = document.getElementById('orderDeliveryArea')?.value.trim() || '';
     const paymentMethod = document.getElementById('orderPaymentMethod')?.value || 'Cash on Delivery';
+    const isPickup = /pickup/i.test(paymentMethod);
+    const deliveryArea = document.getElementById('orderDeliveryArea')?.value.trim() || (isPickup ? 'Kampala' : '');
     const deliveryNotes = document.getElementById('orderDeliveryNotes')?.value.trim() || '';
 
-    if (!customerName || !customerPhone || !deliveryArea) {
-      showToast('Please fill in your name, phone number, and Kampala delivery area.');
+    if (!customerName || !customerPhone || (!isPickup && !deliveryArea)) {
+      showToast(isPickup
+        ? 'Please fill in your name and phone number.'
+        : 'Please fill in your name, phone number, and Kampala delivery area.');
       return;
     }
 
@@ -1120,33 +1123,43 @@
       submitBtn.textContent = 'Confirm Order';
     }
 
-    const subtotal = entries.reduce((sum, entry) => sum + entry.product.priceNumber * entry.quantity, 0);
-    const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 10000;
-    const total = subtotal + deliveryFee;
-
-    const orderRecord = (res && res.order) ? res.order : {
-      order_code: 'BROS-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      delivery_area: deliveryArea,
-      payment_method: paymentMethod,
-      total: total,
-      status: 'confirmed',
-      created_at: Math.floor(Date.now() / 1000),
-      whatsapp_url: buildWhatsAppUrl([
-        `Hi Bros! I have placed Order #BROS`,
-        `Name: ${customerName}`,
-        `Phone: ${customerPhone}`,
-        `Delivery Area: ${deliveryArea}`,
+    if (!res || !res.order) {
+      const fallbackUrl = buildWhatsAppUrl([
+        'Hi Bros! I could not complete checkout on the website and would like to place this order:',
         '',
         ...entries.map(({ product, quantity }) => `- ${quantity}x ${product.name} (${product.price})`),
         '',
-        `Total: ${formatUGX(total)}`,
-      ].join('\n')),
-    };
+        `Name: ${customerName}`,
+        `Phone: ${customerPhone}`,
+        `${isPickup ? 'Fulfilment' : 'Delivery area'}: ${isPickup ? 'Store pickup in Kampala' : deliveryArea}`,
+        `Payment: ${paymentMethod}`,
+        ...(deliveryNotes ? [`Notes: ${deliveryNotes}`] : []),
+      ].join('\n'));
+      if (els.checkoutError) {
+        els.checkoutError.innerHTML = `We couldn't save your order just now. Your bag is safe — please retry, or <a href="${escapeHtml(fallbackUrl)}" target="_blank" rel="noopener noreferrer">send it to Bros on WhatsApp</a>.`;
+        els.checkoutError.hidden = false;
+      }
+      showToast('Order was not saved. Your bag is still available.');
+      return;
+    }
+
+    const orderRecord = res.order;
+    orderRecord.order_code = orderRecord.order_code || orderRecord.orderRef;
+    orderRecord.customer_name = orderRecord.customer_name || orderRecord.customerName || customerName;
+    orderRecord.delivery_area = orderRecord.delivery_area || orderRecord.deliveryArea || deliveryArea;
+    orderRecord.whatsapp_url = orderRecord.whatsapp_url || orderRecord.whatsappUrl || buildWhatsAppUrl(
+      `Hi Bros! Please confirm order ${orderRecord.order_code} for ${customerName} to ${deliveryArea}.`
+    );
 
     state.orders.unshift(orderRecord);
     saveOrdersLocal();
+
+    const orderIsPickup = /pickup/i.test(
+      orderRecord.payment_method || orderRecord.paymentMethod || paymentMethod
+    );
+    const fulfillmentCopy = orderIsPickup
+      ? 'for store pickup in Kampala'
+      : `for delivery to <strong>${escapeHtml(orderRecord.delivery_area)}</strong>`;
 
     state.cart = {};
     saveCart();
@@ -1159,7 +1172,7 @@
         <div class="order-success-card">
           <span class="eyebrow-pill"><span class="eyebrow-dot"></span> Order Confirmed</span>
           <h3>Thank you, ${escapeHtml(orderRecord.customer_name)}!</h3>
-          <p>Your order <strong>${escapeHtml(orderRecord.order_code)}</strong> has been registered for dispatch to <strong>${escapeHtml(orderRecord.delivery_area)}</strong>.</p>
+          <p>Your order <strong>${escapeHtml(orderRecord.order_code)}</strong> has been registered ${fulfillmentCopy}.</p>
           <div class="order-code-banner">
             <span>Order Reference</span>
             <strong>${escapeHtml(orderRecord.order_code)}</strong>
@@ -1213,16 +1226,22 @@
     } else {
       els.ordersBody.innerHTML = `
         <div class="orders-list">
-          ${state.orders.map((o) => `
-            <div class="order-item-card">
-              <div class="order-item-top">
-                <strong>${escapeHtml(o.order_code || o.orderRef)}</strong>
-                <span class="order-status-pill">${escapeHtml(o.status || 'confirmed')}</span>
+          ${state.orders.map((o) => {
+            const isPickup = /pickup/i.test(o.payment_method || o.paymentMethod || '');
+            const fulfillment = isPickup
+              ? 'Store pickup in Kampala'
+              : `Deliver to: <strong>${escapeHtml(o.delivery_area || o.deliveryArea || 'Kampala')}</strong>`;
+            return `
+              <div class="order-item-card">
+                <div class="order-item-top">
+                  <strong>${escapeHtml(o.order_code || o.orderRef)}</strong>
+                  <span class="order-status-pill">${escapeHtml(o.status || 'confirmed')}</span>
+                </div>
+                <p class="order-item-meta">${fulfillment} · Total: <strong>${formatUGX(o.total)}</strong></p>
+                ${Array.isArray(o.items) ? `<p class="order-item-products">${o.items.map(i => `${i.quantity}× ${escapeHtml(i.name)}`).join(', ')}</p>` : ''}
               </div>
-              <p class="order-item-meta">Deliver to: <strong>${escapeHtml(o.delivery_area || o.deliveryArea)}</strong> · Total: <strong>${formatUGX(o.total)}</strong></p>
-              ${Array.isArray(o.items) ? `<p class="order-item-products">${o.items.map(i => `${i.quantity}× ${escapeHtml(i.name)}`).join(', ')}</p>` : ''}
-            </div>
-          `).join('')}
+            `;
+          }).join('')}
         </div>
       `;
     }
@@ -1277,10 +1296,6 @@
     if (els.wishlistCount) {
       els.wishlistCount.textContent = String(count);
       els.wishlistCount.hidden = count === 0;
-    }
-    if (els.utilityWishlistCount) {
-      els.utilityWishlistCount.textContent = String(count);
-      els.utilityWishlistCount.hidden = count === 0;
     }
     if (els.savedTabCount) {
       els.savedTabCount.textContent = String(count);
@@ -1364,6 +1379,8 @@
     els.languageToggle?.setAttribute('aria-expanded', 'false');
     if (els.mobileMenu) els.mobileMenu.hidden = true;
     els.mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+    if (els.mobileDepartments) els.mobileDepartments.hidden = true;
+    document.querySelector('[data-mobile-departments]')?.setAttribute('aria-expanded', 'false');
   }
 
   function showToast(message) {
@@ -1471,12 +1488,13 @@
     };
 
     els.wishlistToggle?.addEventListener('click', showWishlistView);
-    els.wishlistUtility?.addEventListener('click', showWishlistView);
 
     els.cartToggle?.addEventListener('click', (event) => openDialog(els.cartDialog, event.currentTarget));
     els.checkoutWhatsApp?.addEventListener('click', checkoutOnWhatsApp);
     els.openCheckoutModal?.addEventListener('click', openCheckoutDialog);
     els.checkoutForm?.addEventListener('submit', submitOrder);
+    document.getElementById('orderPaymentMethod')?.addEventListener('change', syncCheckoutLocationField);
+    syncCheckoutLocationField();
 
     els.compareClear?.addEventListener('click', () => {
       state.compare.clear();
@@ -1491,16 +1509,26 @@
       event.preventDefault();
       const email = els.updatesEmail?.value.trim();
       if (!email) return;
+      const submitButton = els.updatesForm.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
       const res = await apiRequest('/api/newsletter', {
         method: 'POST',
         body: JSON.stringify({ email }),
       });
-      if (els.updatesFeedback) {
-        els.updatesFeedback.textContent = (res && res.message)
-          ? res.message
-          : 'Subscribed! Opening WhatsApp so the Bros team can note your email.';
+      if (submitButton) submitButton.disabled = false;
+      if (!res || res.status !== 'subscribed') {
+        if (els.updatesFeedback) {
+          els.updatesFeedback.textContent = 'We could not save your email right now. Please try again later or contact us on WhatsApp.';
+          els.updatesFeedback.classList.add('is-error');
+        }
+        showToast('Could not subscribe right now. Please try again.');
+        return;
       }
-      showToast('Subscribed to Bros new arrival alerts!');
+      if (els.updatesFeedback) {
+        els.updatesFeedback.textContent = res.message || 'You are on the Bros new-arrival list.';
+        els.updatesFeedback.classList.remove('is-error');
+      }
+      showToast('Subscribed to Bros new-arrival updates.');
       els.updatesForm.reset();
     });
 
@@ -1616,12 +1644,6 @@
         return;
       }
 
-      if (target.closest('[data-focus-search]')) {
-        els.searchInput?.focus();
-        els.searchInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
       if (target.closest('[data-close-mega]')) {
         closeMenus();
         return;
@@ -1636,6 +1658,13 @@
       if (target instanceof HTMLDialogElement) {
         closeDialog(target);
         return;
+      }
+
+      if (target.closest('.mobile-menu a')) {
+        closeMenus();
+      } else if (!target.closest('.mobile-menu') && !target.closest('.mobile-menu-toggle')) {
+        if (els.mobileMenu) els.mobileMenu.hidden = true;
+        els.mobileMenuToggle?.setAttribute('aria-expanded', 'false');
       }
 
       if (!target.closest('.nav-department') && !target.closest('.language-wrap')) {

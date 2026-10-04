@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fbf7f2">
-  <meta name="description" content="Product details, availability, specifications and verified customer reviews at Bros — Uganda's #1 Smoke Shop.">
+  <meta name="description" content="Product details, availability, specifications and customer reviews at Bros, a premium smoke shop in Uganda.">
   <title>Product Details — Bros Smoke Shop Uganda</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,9 +51,6 @@
       </a>
       <div class="utility-links">
         <a href="tel:+256780844098" aria-label="Call Bros on plus 256 780 844 098"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5 8 4l2 4-2 1.8a15 15 0 0 0 6.2 6.2L16 14l4 2-.5 3c-.1.7-.7 1.2-1.4 1.2C10.4 20.2 3.8 13.6 3.8 5.9c0-.7.5-1.3 1.2-1.4Z"/></svg><span>+256 780 844 098</span></a>
-        <span class="utility-divider" aria-hidden="true"></span>
-        <a class="utility-action" href="index.html?filter=wishlist" aria-label="Show wishlist"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.2-8.8 10.2S3.2 13.9 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"/></svg></span> Wishlist <b id="utilityWishlistCount" hidden>0</b></a>
-        <button class="utility-action" type="button" data-open-cart><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span> Bag <strong id="utilityCartTotal">UGX 0</strong></button>
       </div>
     </div>
   </div>
@@ -149,9 +146,9 @@
             <h2>Reviews &amp; Ratings</h2>
           </div>
           <div class="pdp-rating-badge" id="pdpRatingBadge">
-            <span class="proof-star" aria-hidden="true">★</span>
-            <strong id="pdpAvgRating">4.9</strong>
-            <small id="pdpReviewCount">Verified</small>
+            <span class="proof-star" aria-hidden="true" hidden>★</span>
+            <strong id="pdpAvgRating">—</strong>
+            <small id="pdpReviewCount">No reviews yet</small>
           </div>
         </div>
         <div class="pdp-reviews-layout">
@@ -183,7 +180,7 @@
       </section>
 
       <!-- Related Products -->
-      <section class="section-block pdp-related-section">
+      <section class="section-block pdp-related-section" id="relatedSection">
         <div class="section-heading">
           <div>
             <span class="eyebrow">Similar gear</span>
@@ -207,7 +204,7 @@
   </main>
 
   <div class="pdp-zoom" id="pdpZoom" hidden>
-    <button class="dialog-close" type="button" id="pdpZoomClose" aria-label="Close zoom">×</button>
+    <button class="dialog-close" type="button" id="pdpZoomClose" aria-label="Close zoom"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <img id="pdpZoomImage" class="upscaled-img" alt="">
   </div>
 
@@ -215,7 +212,7 @@
     <div class="container footer-main">
       <div class="footer-brand-column">
         <a class="brand footer-brand" href="index.html" aria-label="Bros home"><span class="brand-mark">b</span><span class="brand-copy"><span class="brand-word">bros<span>.</span></span><small>GOOD TASTE. GREAT GEAR.</small></span></a>
-        <p>Uganda's #1 premium smoke shop. Discover quality vapes, accessories and everyday essentials, with helpful service from the Bros team.</p>
+        <p>Discover quality vapes, accessories and everyday essentials, with helpful service from the Bros team.</p>
         <a class="footer-whatsapp" href="https://wa.me/256780844098?text=Hi%20Bros!" target="_blank" rel="noopener noreferrer"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9.5 9c.6 1.8 2 3.2 3.8 3.8"/></svg></span> WhatsApp <strong>+256 780 844 098</strong></a>
       </div>
       <div class="footer-column"><h2>Shop</h2><a href="index.html?category=Vapes#catalogue">Vapes</a><a href="index.html?category=Accessories#catalogue">Accessories</a><a href="index.html?category=Lighters#catalogue">Lighters</a><a href="index.html?category=Rolling+Papers#catalogue">Rolling essentials</a></div>
@@ -230,7 +227,7 @@
 
   <!-- Bag drawer -->
   <dialog class="cart-dialog" id="cartDialog" aria-labelledby="cartTitle">
-    <div class="drawer-header"><div><span class="eyebrow">Your selection</span><h2 id="cartTitle">Your bag <span id="cartHeadingCount">(0)</span></h2></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close bag">×</button></div>
+    <div class="drawer-header"><div><span class="eyebrow">Your selection</span><h2 id="cartTitle">Your bag <span id="cartHeadingCount">(0)</span></h2></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close bag"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
     <div class="cart-body" id="cartItems"></div>
     <div class="cart-empty" id="cartEmpty"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></div><h3>Your bag is waiting.</h3><p>Add a few favourites, then place your order or send to Bros on WhatsApp.</p><a class="button button-outline" href="index.html#catalogue">Explore products</a></div>
     <div class="cart-footer" id="cartFooter" hidden>
@@ -253,7 +250,7 @@
   <dialog class="checkout-dialog" id="checkoutDialog" aria-labelledby="checkoutTitle">
     <div class="drawer-header">
       <div><span class="eyebrow">Kampala Express Dispatch</span><h2 id="checkoutTitle">Complete your order</h2></div>
-      <button class="dialog-close" type="button" data-close-dialog aria-label="Close checkout">×</button>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close checkout"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="checkout-body" id="checkoutBody">
       <form id="checkoutForm" class="checkout-form">
@@ -266,11 +263,11 @@
           <input id="orderCustomerPhone" name="customerPhone" type="tel" required placeholder="e.g. +256 772 000 000">
         </div>
         <div class="form-row">
-          <label for="orderDeliveryArea">Kampala Area / Delivery Location *</label>
-          <input id="orderDeliveryArea" name="deliveryArea" type="text" required placeholder="e.g. Kololo, Ntinda, Bugolobi, Nakasero">
+          <label for="orderDeliveryArea" id="orderDeliveryAreaLabel">Kampala area or delivery location *</label>
+          <input id="orderDeliveryArea" name="deliveryArea" type="text" required placeholder="e.g. Kololo, Ntinda, or Nakasero">
         </div>
         <div class="form-row">
-          <label for="orderPaymentMethod">Preferred Payment Method</label>
+          <label for="orderPaymentMethod">Payment or pickup option</label>
           <select id="orderPaymentMethod" name="paymentMethod">
             <option value="Mobile Money (MTN / Airtel) on Delivery">Mobile Money (MTN / Airtel) on Delivery</option>
             <option value="Cash on Delivery">Cash on Delivery</option>
@@ -282,6 +279,7 @@
           <input id="orderDeliveryNotes" name="deliveryNotes" type="text" placeholder="Gate code, landmark, or preferred time">
         </div>
         <div class="checkout-summary" id="checkoutSummaryBox"></div>
+        <p class="checkout-error" id="checkoutError" role="alert" hidden></p>
         <div class="checkout-submit-row">
           <button class="button button-primary" type="submit" id="submitOrderBtn">Confirm Order</button>
         </div>
