@@ -50,12 +50,16 @@
     'Accessories': '✳'
   };
 
+  // WhatsApp is a brand mark, not a line icon: it comes from the shared sprite in index.html
+  // so every CTA renders the identical glyph and inherits the current text colour.
+  const WA_ICON = '<svg class="wa-icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>';
+
   const ICON = {
     heart: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 10.2-8.8 10.2S3.2 13.9 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"/></svg>',
     compare: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 4H4v4m0-4 6 6m6 10h4v-4m0 4-6-6M4 16v4h4m-4 0 6-6m10-6V4h-4m4 0-6 6"/></svg>',
     eye: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.7 12s3.3-6 9.3-6 9.3 6 9.3 6-3.3 6-9.3 6-9.3-6-9.3-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>',
     bag: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>',
-    chat: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-11.1 6.6L4 19l.9-4.7A7.5 7.5 0 1 1 20 11.5Z"/><path d="M9 9.3c.5 1.7 1.8 3 3.5 3.7"/></svg>'
+    chat: WA_ICON
   };
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -722,7 +726,7 @@
     const categoryRow = row('Category', chosen.map(product => `<td>${escapeHTML(product.category)}</td>`).join(''));
     const priceRow = row('Price', chosen.map(product => `<td class="compare-price">${formatPrice(product.price)}</td>`).join(''));
     const statusRow = row('Availability', chosen.map(product => `<td>${product.soldOut ? 'Sold out · ask about restock' : 'Listed as available'}</td>`).join(''));
-    const actionRow = row('Next step', chosen.map(product => `<td><a class="button button-primary" href="${escapeHTML(whatsappURL(productMessage(product)))}" target="_blank" rel="noopener noreferrer" data-wa-product="${product.id}">Ask about this item ↗</a></td>`).join(''));
+    const actionRow = row('Next step', chosen.map(product => `<td><a class="button button-whatsapp" href="${escapeHTML(whatsappURL(productMessage(product)))}" target="_blank" rel="noopener noreferrer" data-wa-product="${product.id}">${ICON.chat}Ask about this item</a></td>`).join(''));
     $('#compareContent').innerHTML = `<table class="compare-table"><thead><tr><th scope="col">Product</th>${headers}</tr></thead><tbody>${categoryRow}${priceRow}${statusRow}${actionRow}</tbody></table>`;
     markBrokenImages($('#compareContent'));
     if (!nodes.compareDialog.open) nodes.compareDialog.showModal();

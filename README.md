@@ -19,6 +19,18 @@ Open `http://localhost:8080`.
 - `app.js` — theme persistence, age verification, catalogue filters/search, wishlist, comparison, quick view, local bag and WhatsApp actions.
 - `products.js` — the existing 237-item product array. Product names, UGX prices, image URLs and availability values are preserved from the previous site; product photos are not edited or replaced.
 
+## Icons
+
+Interface icons are inline 24px stroke SVGs that inherit the global `svg` rule in `styles.css`.
+Brand marks are the exception: they are solid glyphs and opt out of the stroke system through
+`.wa-icon` (`fill: currentColor`, no stroke). The WhatsApp mark is declared once as a sprite at
+the top of `index.html` (`<symbol id="icon-whatsapp">`) and every CTA — static markup and the
+templates in `app.js` (`WA_ICON`) alike — references it with `<use href="#icon-whatsapp">`. The
+symbol's `viewBox` carries 4.4 units of padding, so the mark keeps the same optical size as the
+line icons it sits beside at every size (13px chips to 22px floating pill) without per-component
+tuning. Add new WhatsApp touchpoints by reusing the sprite instead of drawing another bubble,
+otherwise the mark drifts one component at a time.
+
 ## Store behaviour
 
 - Orders are handed off to WhatsApp at `+256 780 844 098`; the site does not collect payment details.
