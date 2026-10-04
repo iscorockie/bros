@@ -424,14 +424,18 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
         self.wfile.write(body)
 
     def read_json_body(self) -> dict:
-        length = int(self.headers.get("Content-Length", "0") or "0")
+        try:
+            length = int(self.headers.get("Content-Length", "0") or "0")
+        except (TypeError, ValueError):
+            return {}
         if length <= 0:
             return {}
         raw = self.rfile.read(length)
         try:
-            return json.loads(raw.decode("utf-8"))
-        except Exception:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
             return {}
+        return payload if isinstance(payload, dict) else {}
 
     def do_HEAD(self):
         parsed = urllib.parse.urlparse(self.path)
@@ -998,15 +1002,26 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
                 self.send_json({"error": "Your bag is empty."}, 400)
                 return
 
+            normalized_items = []
+            for line in raw_items:
+                if not isinstance(line, dict):
+                    self.send_json({"error": "Each bag item must be an object."}, 400)
+                    return
+                try:
+                    pid = int(line.get("id", -1))
+                    quantity = int(line.get("quantity", 1))
+                except (TypeError, ValueError, OverflowError):
+                    self.send_json({"error": "Each bag item must have a valid product ID and quantity."}, 400)
+                    return
+                normalized_items.append((pid, max(1, min(25, quantity))))
+
             with _db_lock:
                 conn = get_db()
                 cur = conn.cursor()
                 order_items = []
                 subtotal = 0
                 item_count = 0
-                for line in raw_items:
-                    pid = int(line.get("id", -1))
-                    qty = max(1, min(25, int(line.get("quantity", 1))))
+                for pid, qty in normalized_items:
                     p_row = cur.execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
                     if not p_row:
                         continue
@@ -1030,14 +1045,19 @@ class BrosRequestHandler(SimpleHTTPRequestHandler):
                     self.send_json({"error": "No valid products in order."}, 400)
                     return
 
-                is_pickup = "pickup" in delivery_area.lower() or "pickup" in payment_method.lower()
+                pickup_values = {"pickup", "store pickup", "store pickup in kampala"}
+                is_pickup = (
+                    payment_method.strip().casefold() in pickup_values
+                    or delivery_area.strip().casefold() in pickup_values
+                )
                 delivery_fee = (
                     0 if (subtotal >= FREE_DELIVERY_THRESHOLD or is_pickup) else STANDARD_DELIVERY_FEE
                 )
                 total = subtotal + delivery_fee
 
                 rand_suffix = "".join(random.choices(string.digits, k=4))
-                order_ref = f"BROS-2610-{rand_suffix}"
+                order_month = datetime.datetime.now(datetime.timezone.utc).strftime("%y%m")
+                order_ref = f"BROS-{order_month}-{rand_suffix}"
 
                 lines_txt = "\n".join(
                     f"• {item['name']} × {item['quantity']} — {format_ugx(item['lineTotal'])}"
