@@ -39,6 +39,21 @@ otherwise the mark drifts one component at a time.
 - Product-specific star ratings, old prices, sales counts and stock quantities are not in the source catalogue. The storefront therefore does not invent those values or show a fabricated discount timer/progress bar. Add a real promotion/inventory feed before enabling sale badges, countdowns or sold-progress indicators.
 - Conversion hooks emit `bros:metric` browser events (`add_to_cart`, `whatsapp_click`, `search`, `product_quick_view`, and others). An existing analytics tool can listen for those events or use the optional `dataLayer` integration in `app.js`.
 
+## Markup notes
+
+`index.html` is clean under `html-validate` except two deliberate exceptions, so they are not
+"fixed" again by accident:
+
+- The search typeahead popup keeps `role="listbox"` instead of a native `<select>`: 237 products
+  with photos need filtering as you type. The input is a spec-complete combobox
+  (`role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, `aria-activedescendant`).
+- `require-sri` on the four `<link>`/`<script>` tags: `products.js` and `app.js` are first-party
+  files that change with every catalogue edit (an integrity hash would rot), and Google Fonts
+  does not publish stable hashes for its stylesheet.
+
+The age gate owns the page `<h1>` because it is `display: none` once verified, leaving the hero
+`<h1>` as the only heading at that level in the accessibility tree.
+
 ## Before launch
 
 Confirm the age requirement, delivery threshold, delivery coverage, phone number, store claims and current catalogue availability with the business. The product image URLs continue to load from the existing image host, so those images still require the host to remain available.

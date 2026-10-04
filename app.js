@@ -198,7 +198,8 @@
 
   function setProductImage(elementId, productId) {
     const image = document.getElementById(elementId);
-    const product = productById(productId);
+    // Fall back to the first catalogue item so a slot never keeps its placeholder.
+    const product = productById(productId) || products[0];
     if (!image || !product) return;
     image.src = product.image;
     image.alt = product.name;
@@ -343,8 +344,8 @@
     setProductImage('storyImageValue', products.reduce((cheapest, product) => product.price < cheapest.price ? product : cheapest, products[0]).id);
     const lighter = products.find(product => product.category === 'Lighters' && !product.soldOut);
     const paper = products.find(product => product.category === 'Rolling Papers' && !product.soldOut);
-    if (lighter) setProductImage('storyImageLighter', lighter.id);
-    if (paper) setProductImage('storyImageEssentials', paper.id);
+    setProductImage('storyImageLighter', lighter ? lighter.id : 0);
+    setProductImage('storyImageEssentials', paper ? paper.id : 0);
     const minimum = Math.min(...products.map(product => product.price));
     $('#startingPrice').textContent = `UGX ${minimum.toLocaleString('en-UG')}`;
   }
@@ -633,12 +634,13 @@
 
   function renderQuickView(product) {
     if (!product) return;
+    $('#quickTitle').textContent = `${product.name} — product details`;
     const status = product.soldOut ? 'Currently sold out — ask us about restock.' : 'Listed as available. Please confirm current stock with our team.';
     nodes.quickViewContent.innerHTML = `
       <div class="quick-image"><img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" decoding="async"></div>
       <div class="quick-details">
         <span class="eyebrow">${escapeHTML(product.category)}</span>
-        <h2 id="quickTitle">${escapeHTML(product.name)}</h2>
+        <h2>${escapeHTML(product.name)}</h2>
         <span class="quick-status${product.soldOut ? ' is-sold' : ''}">${status}</span>
         <div class="quick-price">${formatPrice(product.price)}</div>
         <p class="quick-copy">UGX pricing shown as listed. Message Bros to confirm stock, delivery timing and payment details before ordering.</p>
