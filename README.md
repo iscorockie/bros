@@ -20,17 +20,30 @@ python3 -m http.server 8080
 
 The static server does not provide `/api/*` routes.
 
+## Deployment (GitHub Pages)
+
+The storefront stays deployed on GitHub Pages: every push to `main` rebuilds the site straight from the repository root, with no extra build step. It is live at <https://iscorockie.github.io/bros/>.
+
+GitHub Pages serves static assets only, so it does not run `server.py` or provide the API. Backend-dependent detail-page actions need a separately hosted API.
+
+### Connecting the custom domain later
+
+The `bros.chikwafu.com` hookup is intentionally deferred until its DNS is ready. Until then, do not re-add a `CNAME` file: the domain has no DNS records yet, and binding it to Pages redirects `iscorockie.github.io/bros` to an unreachable address, taking the storefront offline. When the owner is ready:
+
+1. Re-add a `CNAME` file at the repository root containing only `bros.chikwafu.com`.
+2. At the DNS provider, point `bros.chikwafu.com` at GitHub Pages — either a `CNAME` record to `iscorockie.github.io` or GitHub's published `A`/`AAAA` addresses.
+3. Wait for GitHub to verify the domain and issue the TLS certificate, then enforce HTTPS in the repository's Pages settings.
+4. Switch `og:url`, the canonical link, and the JSON-LD `url` in `index.html` back from `https://iscorockie.github.io/bros/` to `https://bros.chikwafu.com/`.
+
 ## Storefront files
 
 - `index.html` + `app.js` — rebuilt landing page with catalogue search, category/price filters, sorting, availability, wishlist, comparison, quick view, local bag, and WhatsApp-first ordering.
 - `styles.css` — the rebuilt responsive light/dark design system.
 - `products.js` — the unchanged catalogue of 237 products and existing image URLs.
 - `product.html` + `product.js` + `product.css` — the retained detail/review page and its backend-aware interactions; `product.css` isolates the detail-page styles from the rebuilt homepage stylesheet.
-- `favicon.svg` — site icon. `CNAME` configures the `bros.chikwafu.com` custom domain for GitHub Pages.
+- `favicon.svg` — site icon.
 
 The rebuilt homepage intentionally uses browser storage and WhatsApp for its bag/order handoff; its `app.js` does not call the retained API. The retained detail page still uses API endpoints when served by `server.py`. The homepage currently opens products in its quick-view dialog rather than linking to `product.html`.
-
-GitHub Pages serves static assets only, so it does not run `server.py` or provide the API. Backend-dependent detail-page actions need a separately hosted API when the site is deployed there.
 
 ## Backend (`server.py`)
 
@@ -74,4 +87,4 @@ The age gate owns the page `<h1>` because it is hidden once verified, leaving th
 
 ## Before launch
 
-Confirm the age requirement, delivery threshold and coverage, phone number, store claims, and current catalogue availability with the business. Keep the product image host available. GitHub Pages must remain configured for the `CNAME` domain, and `server.py` must be deployed separately if API-backed functionality is required.
+Confirm the age requirement, delivery threshold and coverage, phone number, store claims, and current catalogue availability with the business. Keep the product image host available. GitHub Pages remains the storefront's deployment — currently at the `iscorockie.github.io/bros` address, with the `bros.chikwafu.com` domain to be reconnected per the checklist above when the owner is ready — and `server.py` must be deployed separately if API-backed functionality is required.
