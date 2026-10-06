@@ -1,5 +1,7 @@
 # Storefront rebuild + backend reconciliation plan
 
+> **Update 2026-10-06:** At the owner's request the GitHub Pages deployment is kept, but the `CNAME` file was removed so the site is immediately reachable at `https://iscorockie.github.io/bros/`. The `bros.chikwafu.com` hookup — CNAME file, DNS records, and the `index.html` URL metadata, now pointing at the Pages URL — is deferred until the owner is ready. See "Connecting the custom domain later" in the README; do not re-add the CNAME file before then.
+
 ## Decision and scope
 
 Target `main`; preserve its Python backend and deployment assets, while taking the rebuilt storefront from `arena/01a0fd46-bros` (the current review branch is based on `bfae5c6`). The merge base is `12d1db33f6dda2adcab141a6eadcfa032df46c1d`.
